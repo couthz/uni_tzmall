@@ -7,4 +7,4 @@
 
 ## 项目链接
 
-Nests后台：https://gitee.com/gz-yami/mall4j
+[Nests后台](https://github.com/couthz/nestjs-tzmall)
