@@ -176,8 +176,7 @@ swiper.pic-swiper .banner {
 }
 
 .up-to-date .title{
-  color: #fff;
-  background: none;
+	font-weight: 800;
 }
 
 .title .more-prod-cont {
@@ -219,28 +218,34 @@ line-height:44rpx;
 }
 
 .up-to-date {
-  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAABxCAYAAACkwXoWAAABS2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxMzggNzkuMTU5ODI0LCAyMDE2LzA5LzE0LTAxOjA5OjAxICAgICAgICAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIi8+CiA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgo8P3hwYWNrZXQgZW5kPSJyIj8+IEmuOgAAAZBJREFUeJzt1DEBwCAAwLAxYfhEGXJABkcTBb065trnAwj6XwcAvGKAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGRdKykDj9OUNYkAAAAASUVORK5CYII=");
-  background-position: top;
-  background-size: 100% 332rpx;
-  background-repeat: no-repeat;
+
   background-color: #fff;
 }
 
 .up-to-date .item-cont {
-  margin: auto;
-  height: auto;
-  width: calc(100% - 40rpx);
-  /* padding:0 20rpx; */
-  display: flex;
-  flex-wrap:wrap;
   /* justify-content: space-around; */
   /* padding: 10rpx 0 0 0; */
 }
 
-.hotsale-item-cont {
-  padding-bottom: 20rpx;
-  background: #fff;
+.up-to-date .item-cont .item-cont-scroll{
+	white-space: nowrap; /* 防止内部元素换行 */
+	  width: 100%; 
+  /* justify-content: space-around; */
+  /* padding: 10rpx 0 0 0; */
 }
+
+
+ .up-to-date .item-cont-grid {
+  margin: auto;
+  height: auto;
+  width: calc(100% - 40rpx);
+
+  display: flex;
+  flex-wrap:wrap;
+
+} 
+
+
 
 .up-to-date .item-cont::before {
   clear: both;

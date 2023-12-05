@@ -16,140 +16,83 @@
       <block v-for="(item, index) in indexImgs" :key="index">
         <swiper-item class="banner-item">
           <view class="img-box">
-            <image :src="item.imgUrl" :data-prodid="item.relation" @tap="toProdPage" class="banner"></image>
+            <image :src="item" :data-prodid="item.relation" @tap="toProdPage" class="banner"></image>
           </view>
         </swiper-item>
       </block>
     </swiper>
     <!-- end swiper -->
 
-    <view class="cat-item">
-      <view class="item" @tap="toClassifyPage" data-sts="1">
-        <image src="/static/images/icon/newProd.png"></image>
-        <text>新品推荐</text>
-      </view>
-      <view class="item" @tap="toClassifyPage" data-sts="1">
-        <image src="/static/images/icon/timePrice.png"></image>
-        <text>限时特惠</text>
-      </view>
-      <view class="item" @tap="toClassifyPage" data-sts="3">
-        <image src="/static/images/icon/neweveryday.png"></image>
-        <text>每日疯抢</text>
-      </view>
-      <view class="item" @tap="toCouponCenter">
-        <image src="/static/images/icon/newprods.png"></image>
-        <text>领优惠券</text>
-      </view>
-    </view>
-
-    <!-- 消息播放 -->
-    <view v-if="news && news.length" class="message-play" @tap="onNewsPage">
-      <image src="/static/images/icon/horn.png" class="hornpng"></image>
-      <swiper :vertical="true" :autoplay="true" :circular="true" duration="1000" class="swiper-cont">
-        <block v-for="(item, index) in news" :key="index">
-          <swiper-item class="items">{{item.title}}</swiper-item>
-        </block>
-      </swiper>
-      <text class="arrow"></text>
-    </view>
-
   </view>
 	
 	<view class="updata" v-if="updata">
 		<block v-for="(item, index) in taglist" :key="index">
-		  <!-- 每日上新 -->
+		  <!-- 新品推荐 -->
 		  <view class="up-to-date" v-if="item.style==2 && item.prods && item.prods.length">
 		    <view class="title">
 		      <text>{{item.title}}</text>
-		      <view class="more-prod-cont" @tap="toClassifyPage" data-sts="0" :data-id="item.id" :data-title="item.title">
-		        <text class="more">查看更多</text>
+<!-- 		      <view class="more-prod-cont" @tap="toClassifyPage" data-sts="0" :data-id="item.id" :data-title="item.title">
+		        <text class="more">查看更多</text> -->
 		        <!-- <text class='arrow'></text> -->
-		      </view>
+		      <!-- </view> -->
 		    </view>
 		    <view class="item-cont">
-		      <block v-for="(prod, index2) in item.prods" :key="index2">
-		        <view class="prod-item" @tap="toProdPage" :data-prodid="prod.prodId">
-		          <view>
-		            <view class="imagecont">
-		              <image :src="prod.pic" class="prodimg"></image>
-		            </view>
-		            <view class="prod-text">{{prod.prodName}}</view>
-		            <view class="price">
-		              <text class="symbol">￥</text>
-		              <text class="big-num">{{wxs.parsePrice(prod.price)[0]}}</text>
-		              <text class="small-num">.{{wxs.parsePrice(prod.price)[1]}}</text>
-		            </view>
-		          </view>
-		        </view>
-		      </block>
-		
+				<scroll-view class="item-cont-scroll" scroll-x="true">
+					<block v-for="(prod, index2) in item.prods" :key="index2">
+					  <view class="prod-item" @tap="toProdPage" :data-prodid="prod.prodId">
+					    <view>
+					      <view class="imagecont">
+					        <image :src="prod.pic" class="prodimg"></image>
+					      </view>
+					      <view class="prod-text">{{prod.prodName}}</view>
+					      <view class="price">
+					        <text class="symbol">￥</text>
+					        <text class="big-num">{{prod.price}}</text>
+					      </view>
+					    </view>
+					  </view>
+					</block>
+				</scroll-view>
 		    </view>
 		  </view>
 		
-		  <!-- 商城热卖 -->
-		  <view class="hot-sale" v-if="item.style==1 && item.prods && item.prods.length">
-		    <view class="title">
-		      <text>{{item.title}}</text>
-		      <view class="more-prod-cont" @tap="toClassifyPage" data-sts="0" :data-id="item.id" :data-title="item.title">
-		        <text class="more">更多</text>
-		        <text class="arrow"></text>
-		      </view>
-		    </view>
-		    <view class="hotsale-item-cont">
-		      <block v-for="(prod, index2) in item.prods" :key="index2">
-		        <view class="prod-items" @tap="toProdPage" :data-prodid="prod.prodId">
-		          <view class="hot-imagecont">
-		            <image :src="prod.pic" class="hotsaleimg"></image>
-		          </view>
-		          <view class="hot-text">
-		            <view class="hotprod-text">{{prod.prodName}}</view>
-		            <view class="prod-info">{{prod.brief}}</view>
-		            <view class="prod-text-info">
-		              <view class="price">
-		                <text class="symbol">￥</text>
-		                <text class="big-num">{{wxs.parsePrice(prod.price)[0]}}</text>
-		                <text class="small-num">.{{wxs.parsePrice(prod.price)[1]}}</text>
-		              </view>
-		              <!-- <view class='singal-price'>
-		                <text>￥</text>
-		                <text>{{prod.oriPrice}}</text>
-		              </view> -->
-		              <image src="/static/images/tabbar/basket-sel.png" class="basket-img"></image>
-		            </view>
-		          </view>
-		        </view>
-		      </block>
-		    </view>
-		  </view>
-		
-		  <!-- 更多宝贝 -->
-		  <view class="more-prod" v-if="item.style==0 && item.prods && item.prods.length">
-		    <view class="title">{{item.title}}</view>
-		    <view class="prod-show">
-		      <block v-for="(prod, index2) in item.prods" :key="index2">
-		        <view class="show-item" @tap="toProdPage" :data-prodid="prod.prodId">
-		          <view class="more-prod-pic">
-		            <image :src="prod.pic" class="more-pic"></image>
-		          </view>
-		          <view class="prod-text-right">
-		            <view class="prod-text more">{{prod.prodName}}</view>
-		            <view class="prod-info">{{prod.brief}}</view>
-		            <view class="b-cart">
-		              <view class="price">
-		                <text class="symbol">￥</text>
-		                <text class="big-num">{{wxs.parsePrice(prod.price)[0]}}</text>
-		                <text class="small-num">.{{wxs.parsePrice(prod.price)[1]}}</text>
-		              </view>
-		              <!-- <view class='go-to-buy'>立即购买</view> -->
-		              <image src="/static/images/tabbar/basket-sel.png" @tap.stop="addToCart(prod)" class="basket-img"></image>
-		            </view>
-		          </view>
-		        </view>
-		      </block>
-		    </view>
-		  </view>
+		 
 		</block>
 	</view>
+	
+	<view class="updata" v-if="updata">
+			<block v-for="(item, index) in categoryList" :key="index">
+			  <!-- 新品推荐 -->
+			  <view class="up-to-date" v-if="item.prods && item.prods.length">
+			    <view class="title">
+			      <text>{{item.categoryName}}</text>
+	<!-- 		      <view class="more-prod-cont" @tap="toClassifyPage" data-sts="0" :data-id="item.id" :data-title="item.title">
+			        <text class="more">查看更多</text> -->
+			        <!-- <text class='arrow'></text> -->
+			      <!-- </view> -->
+			    </view>
+			    <view class="item-cont item-cont-grid">
+						<block v-for="(prod, index2) in item.prods" :key="index2">
+						  <view class="prod-item" @tap="toProdPage" :data-prodid="prod.prodId">
+						    <view>
+						      <view class="imagecont">
+						        <image :src="prod.pic" class="prodimg"></image>
+						      </view>
+						      <view class="prod-text">{{prod.prodName}}</view>
+						      <view class="price">
+						        <text class="symbol">￥</text>
+						        <text class="big-num">{{prod.price}}</text>
+						      </view>
+						    </view>
+						  </view>
+						</block>
+			    </view>
+			  </view>
+			</block>
+		</view>
+	
+	
+	
   
 </view>
 </template>
@@ -176,10 +119,11 @@ export default {
       seq: 0,
       news: [],
       taglist: [],
+	  categoryList: [],
       sts: 0,
       scrollTop: "",
-			current: 0,
-			updata: true
+	  current: 0,
+	  updata: true
     };
   },
 
@@ -264,13 +208,11 @@ export default {
         },
         callBack: res => {
           var params1 = {
-            url: "/p/shopCart/changeItem",
+            url: "/shopcart/shopcartItem/changeItem",
             method: "POST",
             data: {
-              basketId: 0,
               count: 1,
               prodId: res.prodId,
-              shopId: res.shopId,
               skuId: res.skuList[0].skuId
             },
             callBack: res => {
@@ -326,24 +268,29 @@ export default {
 
       this.getIndexImgs();
       this.getNoticeList();
-      this.getTag();
+      this.getTagProd();
+	  
+	  this.getCategoryList();
     },
 
-    //加载轮播图
+    //TODO加载轮播图
     getIndexImgs() {
       //加载轮播图
-      var params = {
-        url: "/indexImgs",
-        method: "GET",
-        data: {},
-        callBack: res => {
-          this.setData({
-            indexImgs: res,
-            seq: res
-          });
-        }
-      };
-      http.request(params);
+      // var params = {
+      //   url: "/indexImgs",
+      //   method: "GET",
+      //   data: {},
+      //   callBack: res => {
+      //     this.setData({
+      //       indexImgs: res,
+      //       seq: res
+      //     });
+      //   }
+      // };
+      // http.request(params);
+	  this.setData({
+		indexImgs:["https://pic49.photophoto.cn/20181128/0018094561927770_b.jpg"],
+	  });
     },
 
     getNoticeList() {
@@ -382,22 +329,35 @@ export default {
       http.request(params);
     },
 
-    getTagProd(id, index) {
+    getTagProd() {
       var param = {
-        url: "/prod/prodListByTagId",
+        url: "/prod/prodTag/tagProdList",
         method: "GET",
-        data: {
-          tagId: id,
-          size: 6
-        },
+        // data: {
+        //   tagId: id,
+        //   size: 6
+        // },
         callBack: res => {
-					this.updata = false
-					this.updata = true
-          var taglist = this.taglist;
-          taglist[index].prods = res.records;
+					// this.updata = false
+					// this.updata = true
+     //      var taglist = this.taglist;
+     //      taglist[index].prods = res.data;
           this.setData({
-            taglist: taglist
+            taglist: res
           });
+        }
+      };
+      http.request(param);
+    },
+	
+	getCategoryList() {
+      var param = {
+        url: "/prod/prodCategory/categoryProdList",
+        method: "GET",
+        callBack: res => {
+          this.setData({
+            categoryList: res
+          }); 
         }
       };
       http.request(param);

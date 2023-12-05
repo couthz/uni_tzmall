@@ -1,0 +1,8 @@
+{
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTextStyle": "black",
+  "enablePullDownRefresh": true,
+  "navigationBarTitleText": "mall4j",
+  "usingComponents": {}
+}

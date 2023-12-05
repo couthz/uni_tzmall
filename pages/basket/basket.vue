@@ -1,116 +1,110 @@
 <template>
-<!--pages/basket/basket.wxml-->
-<view class="container">
-  <view class="prod-list">
-    <block v-for="(item, scIndex) in shopCartItemDiscounts" :key="scIndex">
+  <!--pages/basket/basket.wxml-->
+  <view class="container">
+    <view class="prod-list">
+      <!-- <block v-for="(item, scIndex) in shopcartItemDiscounts" :key="scIndex"> -->
       <view class="prod-block">
-        <view class="discount-tips" v-if="item.chooseDiscountItemDto">
-          <text class="text-block">{{wxs.parseDiscount(item.chooseDiscountItemDto.discountRule)}}</text>
-          <text class="text-list">{{wxs.parseDiscountMsg(item.chooseDiscountItemDto.discountRule,item.chooseDiscountItemDto.needAmount,item.chooseDiscountItemDto.discount)}}</text>
+        <view class="discount-tips" v-if="chooseDiscountItemDto">
+          <text class="text-block">{{
+            wxs.parseDiscount(chooseDiscountItemDto.discountRule)
+          }}</text>
+          <text class="text-list">{{
+            wxs.parseDiscountMsg(
+              chooseDiscountItemDto.discountRule,
+              chooseDiscountItemDto.needAmount,
+              chooseDiscountItemDto.discount
+            )
+          }}</text>
         </view>
-        <block v-for="(prod, index) in item.shopCartItems" :key="index">
-          <view class="item">
-            <view class="btn">
-              <label>
-                <checkbox @tap="onSelectedItem" :data-scindex="scIndex" :data-index="index" :value="toString(prod.prodId)" :checked="prod.checked" color="#105c3e"></checkbox>
-              </label>
+      </view>
+      <block v-for="(prod, index) in shopcartItems" :key="index">
+        <view class="item">
+          <view class="btn">
+            <label>
+              <checkbox
+                @tap="onSelectedItem"
+                :data-index="index"
+                :value="toString(prod.prodId)"
+                :checked="prod.checked"
+                color="#105c3e"
+              ></checkbox>
+            </label>
+          </view>
+          <view class="prodinfo">
+            <view class="pic">
+              <image :src="prod.pic"></image>
             </view>
-            <view class="prodinfo">
-              <view class="pic">
-                <image :src="prod.pic"></image>
-              </view>
-              <view class="opt">
-                <view class="prod-name">{{prod.prodName}}</view>
-                <text :class="'prod-info-text ' + (prod.skuName?'':'empty-n')">{{prod.skuName}}</text>
-                <view class="price-count">
-                  <view class="price">
-                    <text class="symbol">￥</text>
-                    <text class="big-num">{{wxs.parsePrice(prod.price)[0]}}</text>
-                    <text class="small-num">.{{wxs.parsePrice(prod.price)[1]}}</text>
-                  </view>
-                  <view class="m-numSelector">
-                    <view @tap="onCountMinus" class="minus" :data-scindex="scIndex" :data-index="index"></view>
-                    <input type="number" :value="prod.prodCount" disabled></input>
-                    <view @tap="onCountPlus" class="plus" :data-scindex="scIndex" :data-index="index"></view>
-                  </view>
+            <view class="opt">
+              <view class="prod-name">{{ prod.sku.prodName }}</view>
+              <text
+                :class="'prod-info-text ' + (prod.sku.skuName ? '' : 'empty-n')"
+                >{{ prod.sku.skuName }}</text
+              >
+              <view class="price-count">
+                <view class="price">
+                  <text class="symbol">￥</text>
+                  <text class="big-num">{{ prod.sku.price }}</text>
+                </view>
+                <view class="m-numSelector">
+                  <view
+                    @tap="onCountMinus"
+                    class="minus"
+                    :data-index="index"
+                  ></view>
+                  <input type="number" :value="prod.itemCount" disabled />
+                  <view
+                    @tap="onCountPlus"
+                    class="plus"
+                    :data-scindex="scIndex"
+                    :data-index="index"
+                  ></view>
                 </view>
               </view>
             </view>
           </view>
-        </block>
-
-      </view>
-    </block>
-
-    <!-- <view class='lose-efficacy'>
-      <view class='discount-tips'>
-        
-        <text class='text-list'>失效商品</text>
-        <text class='empty-prod'>清空失效商品</text>
-      </view>
-      <view class='item'>
-        <view class="staus">
-          <text>失效</text>
         </view>
-        <view class='prodinfo'>
-          <view class="pic">
-            <image src='../../images/prod/pic11.jpg' />
+      </block>
+    </view>
+
+
+    <view class="empty" v-if="shopcartItems.length == 0">
+      <view class="img">
+        <image src="/static/images/tabbar/basket.png"></image>
+      </view>
+      <view class="txt"> 您还没有添加任何商品哦~ </view>
+    </view>
+
+    <!-- 底部按钮 -->
+    <view class="cart-footer" v-if="shopcartItems.length > 0">
+      <view class="btn all">
+        <label @tap="onSelAll">
+          <checkbox :checked="allChecked" color="#f7d731;"></checkbox
+          >全选</label
+        >
+      </view>
+      <view class="btn del" @tap="onDelBasket">
+        <text>删除</text>
+      </view>
+      <view class="btn total">
+        <view class="finally">
+          <text>合计:</text>
+          <view class="price">
+            <text class="symbol">￥</text>
+            <text class="big-num">{{ totalMoney }}</text>
           </view>
-          <view class="opt">
-            <view class='prod-name'>宠物用品洗澡香波沐浴除臭留</view>
-            <view class='prod-info-text'>60克</view>
-            <view class='price-count'>
-              <view class='price'>
-                <text class='symbol'>￥</text>
-                <text class='big-num'>{{wxs.parsePrice(10.00)[0]}}</text>
-                <text class='small-num'>.{{wxs.parsePrice(10.00)[1]}}</text>
-              </view>
-            </view>
-          </view>
+        </view>
+        <view class="total-msg" v-if="subtractMoney > 0">
+          总额:￥{{ wxs.toPrice(totalMoney) }} 立减:￥{{
+            wxs.toPrice(subtractMoney)
+          }}
         </view>
       </view>
-    </view> -->
-
-  </view>
-
-  <view class="empty" v-if="shopCartItemDiscounts.length==0">
-    <view class="img">
-      <image src="/static/images/tabbar/basket.png"></image>
-    </view>
-    <view class="txt">
-      您还没有添加任何商品哦~
-    </view>
-  </view>
-
-  <!-- 底部按钮 -->
-  <view class="cart-footer" v-if="shopCartItemDiscounts.length>0">
-    <view class="btn all">
-      <label @tap="onSelAll">
-        <checkbox :checked="allChecked" color="#f7d731;"></checkbox>全选</label>
-    </view>
-    <view class="btn del" @tap="onDelBasket">
-      <text>删除</text>
-    </view>
-    <view class="btn total">
-      <view class="finally">
-        <text>合计:</text>
-        <view class="price">
-          <text class="symbol">￥</text>
-          <text class="big-num">{{wxs.parsePrice(finalMoney)[0]}}</text>
-          <text class="small-num">.{{wxs.parsePrice(finalMoney)[1]}}</text>
-        </view>
-      </view>
-      <view class="total-msg" v-if="subtractMoney>0">
-        总额:￥{{wxs.toPrice(totalMoney)}} 立减:￥{{wxs.toPrice(subtractMoney)}}
+      <view class="btn settle" @tap="toFirmOrder">
+        <text>结算</text>
       </view>
     </view>
-    <view class="btn settle" @tap="toFirmOrder">
-      <text>结算</text>
-    </view>
+    <!-- end 底部按钮 -->
   </view>
-  <!-- end 底部按钮 -->
-
-</view>
 </template>
 
 <script module="wxs" lang="wxs" src="../../wxs/number.wxs"></script>
@@ -125,11 +119,11 @@ export default {
   data() {
     return {
       // picDomain: config.picDomain,
-      shopCartItemDiscounts: [],
-      finalMoney: 0,
+      //shopcartItemDiscounts: [],
+      shopcartItems: [],
+	  subtractMoney: 0,
       totalMoney: 0,
-      subtractMoney: 0,
-      allChecked: false
+      allChecked: false,
     };
   },
 
@@ -154,64 +148,59 @@ export default {
     http.getCartCount(); //重新计算购物车总数量
   },
   methods: {
-		loadBasketData(){
-			uni.showLoading(); //加载购物车
-			
-			var params = {
-			  url: "/p/shopCart/info",
-			  method: "POST",
-			  data: {},
-			  callBack: res => {
-			    if (res.length > 0) {
-			      // 默认不选中
-			      var shopCartItemDiscounts = res[0].shopCartItemDiscounts;
-			      shopCartItemDiscounts.forEach(shopCartItemDiscount => {
-			        shopCartItemDiscount.shopCartItems.forEach(shopCartItem => {
-			          shopCartItem.checked = false;
-			        });
-			      });
-			      this.setData({
-			        shopCartItemDiscounts: shopCartItemDiscounts,
-			        allChecked: false
-			      });
-			    } else {
-			      this.setData({
-			        shopCartItemDiscounts: []
-			      });
-			    }
-			
-			    this.calTotalPrice(); //计算总价
-			
-			    uni.hideLoading();
-			  }
-			};
-			http.request(params);
-		},
+    loadBasketData() {
+      uni.showLoading(); //加载购物车
+
+      var params = {
+        url: "/shopcart/shopcartItem/info",
+        method: "POST",
+        data: {},
+        callBack: (res) => {
+		  console.log(JSON.stringify(res));
+          if (res.length > 0) {
+            res.forEach((shopcartItem) => {
+              shopcartItem.checked = false;
+            });
+            this.setData({
+              shopcartItems: res,
+              allChecked: false,
+            });
+          } else {
+            this.setData({
+              shopcartItems: [],
+            });
+          }
+
+          this.calTotalPrice(); //计算总价
+
+          uni.hideLoading();
+        },
+      };
+      http.request(params);
+    },
     /**
      * 去结算
      */
     toFirmOrder: function () {
-      var shopCartItemDiscounts = this.shopCartItemDiscounts;
-      var basketIds = [];
-      shopCartItemDiscounts.forEach(shopCartItemDiscount => {
-        shopCartItemDiscount.shopCartItems.forEach(shopCartItem => {
-          if (shopCartItem.checked) {
-            basketIds.push(shopCartItem.basketId);
-          }
-        });
+      var shopcartItems = this.shopcartItems;
+      var shopcartItemIds = [];
+      shopcartItems.forEach((shopcartItem) => {
+        if (shopcartItem.checked) {
+          shopcartItemIds.push(shopcartItem.shopcartItemId);
+        }
       });
 
-      if (!basketIds.length) {
+      if (!shopcartItemIds.length) {
         uni.showToast({
-          title: '请选择商品',
-          icon: "none"
+          title: "请选择商品",
+          icon: "none",
         });
         return;
       }
 
-      uni.setStorageSync("basketIds", JSON.stringify(basketIds));
+      uni.setStorageSync("shopcartItemIds", JSON.stringify(shopcartItemIds));
       uni.navigateTo({
-        url: '/pages/submit-order/submit-order?orderEntry=0'
+        url: "/pages/submit-order/submit-order?orderEntry=0",
       });
     },
 
@@ -222,19 +211,16 @@ export default {
       var allChecked = this.allChecked;
       allChecked = !allChecked; //改变状态
 
-      var shopCartItemDiscounts = this.shopCartItemDiscounts;
+      var shopcartItems = this.shopcartItems;
 
-      for (var i = 0; i < shopCartItemDiscounts.length; i++) {
-        var cItems = shopCartItemDiscounts[i].shopCartItems;
-
-        for (var j = 0; j < cItems.length; j++) {
-          cItems[j].checked = allChecked;
-        }
+      for (var i = 0; i < shopcartItems.length; i++) {
+        var shopcartItem = shopcartItems[i];
+        shopcartItem.checked = allChecked;
       }
 
       this.setData({
         allChecked: allChecked,
-        shopCartItemDiscounts: shopCartItemDiscounts
+        shopcartItems: shopcartItems,
       });
       this.calTotalPrice(); //计算总价
     },
@@ -245,15 +231,14 @@ export default {
     onSelectedItem: function (e) {
       var index = e.currentTarget.dataset.index; // 获取data- 传进来的index
 
-      var scindex = e.currentTarget.dataset.scindex;
-      var shopCartItemDiscounts = this.shopCartItemDiscounts; // 获取购物车列表
+      var shopcartItems = this.shopcartItems; // 获取购物车列表
 
-      var checked = shopCartItemDiscounts[scindex].shopCartItems[index].checked; // 获取当前商品的选中状态
+      var checked = shopcartItems[index].checked; // 获取当前商品的选中状态
 
-      shopCartItemDiscounts[scindex].shopCartItems[index].checked = !checked; // 改变状态
+      shopcartItems[index].checked = !checked; // 改变状态
 
       this.setData({
-        shopCartItemDiscounts: shopCartItemDiscounts
+        shopcartItems: shopcartItems,
       });
       this.checkAllSelected(); //检查全选状态
 
@@ -265,27 +250,18 @@ export default {
      */
     checkAllSelected: function () {
       var allChecked = true;
-      var shopCartItemDiscounts = this.shopCartItemDiscounts;
-      var flag = false;
+      var shopcartItems = this.shopcartItems;
 
-      for (var i = 0; i < shopCartItemDiscounts.length; i++) {
-        var cItems = shopCartItemDiscounts[i].shopCartItems;
-
-        for (var j = 0; j < cItems.length; j++) {
-          if (!cItems[j].checked) {
-            allChecked = !allChecked;
-            flag = true;
-            break;
-          }
-        }
-
-        if (flag) {
+      for (var i = 0; i < shopcartItems.length; i++) {
+        var shopcartItem = shopcartItems[i];
+        if (!shopcartItem.checked) {
+          allChecked = !allChecked;
           break;
         }
       }
 
       this.setData({
-        allChecked: allChecked
+        allChecked: allChecked,
       });
     },
 
@@ -293,33 +269,33 @@ export default {
      * 计算购物车总额
      */
     calTotalPrice: function () {
-      var shopCartItemDiscounts = this.shopCartItemDiscounts;
-      var shopCartIds = [];
+      var shopcartItems = this.shopcartItems;
+      var shopcartIds = [];
 
-      for (var i = 0; i < shopCartItemDiscounts.length; i++) {
-        var cItems = shopCartItemDiscounts[i].shopCartItems;
+      for (var i = 0; i < shopcartItems.length; i++) {
+        var shopcartItem = shopcartItems[i];
 
-        for (var j = 0; j < cItems.length; j++) {
-          if (cItems[j].checked) {
-            shopCartIds.push(cItems[j].basketId);
-          }
+        if (shopcartItem.checked) {
+          shopcartIds.push(shopcartItem.shopcartItemId);
         }
       }
+	  
+	  if(shopcartIds.length === 0) {
+		  return;
+	  }
 
       var ths = this;
       uni.showLoading();
       var params = {
-        url: "/p/shopCart/totalPay",
+        url: "/shopcart/shopcartItem/totalPay",
         method: "POST",
-        data: shopCartIds,
+        data: {shopcartItemIds: shopcartIds},
         callBack: function (res) {
           ths.setData({
-            finalMoney: res.finalMoney,
-            totalMoney: res.totalMoney,
-            subtractMoney: res.subtractMoney
+            totalMoney: res.totalPay,
           });
           uni.hideLoading();
-        }
+        },
       };
       http.request(params);
     },
@@ -329,12 +305,11 @@ export default {
      */
     onCountMinus: function (e) {
       var index = e.currentTarget.dataset.index;
-      var scindex = e.currentTarget.dataset.scindex;
-      var shopCartItemDiscounts = this.shopCartItemDiscounts;
-      var prodCount = shopCartItemDiscounts[scindex].shopCartItems[index].prodCount;
+      var shopcartItems = this.shopcartItems;
+      var prodCount = shopcartItems[index].itemCount;
 
       if (prodCount > 1) {
-        this.updateCount(shopCartItemDiscounts, scindex, index, -1);
+        this.updateCount(shopcartItems, index, -1);
       }
     },
 
@@ -343,38 +318,36 @@ export default {
      */
     onCountPlus: function (e) {
       var index = e.currentTarget.dataset.index;
-      var scindex = e.currentTarget.dataset.scindex;
-      var shopCartItemDiscounts = this.shopCartItemDiscounts;
-      this.updateCount(shopCartItemDiscounts, scindex, index, 1);
+      var shopcartItems = this.shopcartItems;
+      this.updateCount(shopcartItems, index, 1);
     },
 
     /**
      * 改变购物车数量接口
      */
-    updateCount: function (shopCartItemDiscounts, scindex, index, prodCount) {
+    updateCount: function (shopcartItems, index, prodCount) {
       var ths = this;
       uni.showLoading({
-        mask: true
+        mask: true,
       });
       var params = {
-        url: "/p/shopCart/changeItem",
+        url: "/shopcart/shopcartItem/changeItem",
         method: "POST",
         data: {
-          count: prodCount,
-          prodId: shopCartItemDiscounts[scindex].shopCartItems[index].prodId,
-          skuId: shopCartItemDiscounts[scindex].shopCartItems[index].skuId,
-          shopId: 1
+          itemCount: shopcartItems[index].shopcartItemId,
+          prodId: shopcartItems[index].prodId,
+          skuId: shopcartItems[index].skuId,
         },
         callBack: function (res) {
-          shopCartItemDiscounts[scindex].shopCartItems[index].prodCount += prodCount;
+          shopcartItems[index].itemCount += prodCount;
           ths.setData({
-            shopCartItemDiscounts: shopCartItemDiscounts
+            shopcartItems: shopcartItems,
           });
           ths.calTotalPrice(); //计算总价
 
           uni.hideLoading();
           http.getCartCount(); //重新计算购物车总数量
-        }
+        },
       };
       http.request(params);
     },
@@ -384,52 +357,49 @@ export default {
      */
     onDelBasket: function () {
       var ths = this;
-      var shopCartItemDiscounts = this.shopCartItemDiscounts;
-      var basketIds = [];
+      var shopcartItems = this.shopcartItems;
+      var shopcartItemIds = [];
 
-      for (var i = 0; i < shopCartItemDiscounts.length; i++) {
-        var cItems = shopCartItemDiscounts[i].shopCartItems;
+      for (var i = 0; i < shopcartItems.length; i++) {
+        var shopcartItem = shopcartItems[i];
 
-        for (var j = 0; j < cItems.length; j++) {
-          if (cItems[j].checked) {
-            basketIds.push(cItems[j].basketId);
-          }
+        if (shopcartItem.checked) {
+          shopcartItemIds.push(shopcartItem.shopcartItemId);
         }
       }
 
-      if (basketIds.length == 0) {
+      if (shopcartItemIds.length == 0) {
         uni.showToast({
-          title: '请选择商品',
-          icon: "none"
+          title: "请选择商品",
+          icon: "none",
         });
       } else {
         uni.showModal({
-          title: '',
-          content: '确认要删除选中的商品吗？',
+          title: "",
+          content: "确认要删除选中的商品吗？",
           confirmColor: "#eb2444",
 
           success(res) {
             if (res.confirm) {
               uni.showLoading({
-                mask: true
+                mask: true,
               });
               var params = {
-                url: "/p/shopCart/deleteItem",
+                url: "/shopcart/shopcartItem/deleteItems",
                 method: "DELETE",
-                data: basketIds,
+                data: {shopcartItemIds},
                 callBack: function (res) {
                   uni.hideLoading();
                   ths.loadBasketData();
-                }
+                },
               };
               http.request(params);
             }
-          }
-
+          },
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

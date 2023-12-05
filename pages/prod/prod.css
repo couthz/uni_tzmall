@@ -169,7 +169,8 @@ swiper image {
   font-family: arial;
 }
 
-.coupon-con .item:before, .coupon-con .item:after {
+.coupon-con .item:before,
+.coupon-con .item:after {
   content: "";
   display: block;
   width: 0;
@@ -532,7 +533,7 @@ img {
   display: flex;
   flex-direction: row nowrap;
   height: 98rpx;
-  z-index: 999;
+  z-index: 10;
   box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
 }
 
@@ -597,6 +598,10 @@ img {
 
 /** end  底部按钮 */
 
+/** 规格弹窗 **/
+.sku-select {
+  z-index: 999;
+}
 /** 优惠券弹窗 **/
 
 .popup-hide {
@@ -794,7 +799,8 @@ img {
   display: flex;
 }
 
-.num-wrap .minus, .num-wrap .plus {
+.num-wrap .minus,
+.num-wrap .plus {
   position: relative;
   max-width: 30px;
   min-width: 30px;

@@ -15,7 +15,9 @@
             "autoclose" : true,
             "delay" : 0
         },
-        "modules" : {},
+        "modules" : {
+            "OAuth" : {}
+        },
         "distribute" : {
             "android" : {
                 "permissions" : [
@@ -44,12 +46,19 @@
                 ]
             },
             "ios" : {},
-            "sdkConfigs" : {}
+            "sdkConfigs" : {
+                "oauth" : {
+                    "weixin" : {
+                        "appid" : "wxeda033eb249af3fc",
+                        "UniversalLinks" : ""
+                    }
+                }
+            }
         }
     },
     "quickapp" : {},
     "mp-weixin" : {
-        "appid" : "wx6fa71e69231a4fa4",
+        "appid" : "",
         "setting" : {
             "urlCheck" : false
         },

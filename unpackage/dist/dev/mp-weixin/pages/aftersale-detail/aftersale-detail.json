@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "timeline": "/components/chenbin-timeline/timeLine",
+    "timeline-item": "/components/chenbin-timeline/timelineItem"
+  }
+}

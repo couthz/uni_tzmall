@@ -1,0 +1,40 @@
+{
+  "description": "项目配置文件。",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "setting": {
+    "urlCheck": false,
+    "es6": false,
+    "postcss": false,
+    "minified": false,
+    "newFeature": true,
+    "bigPackageSizeSupport": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "condition": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "",
+  "appid": "wxeda033eb249af3fc",
+  "projectname": "yamikejimall4j",
+  "condition": {
+    "miniprogram": {
+      "list": [
+        {
+          "name": "描述页",
+          "pathName": "pages/aftersale-apply/aftersale-type",
+          "query": ""
+        }
+      ]
+    }
+  },
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  }
+}

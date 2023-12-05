@@ -1,0 +1,26 @@
+page {
+  background-color: #f4f4f4;
+}
+.container .title {
+  font-weight: 800;
+  text-align: center;
+  margin-top: 40rpx;
+  margin-bottom: 40rpx;
+}
+.container .reason-list {
+  font-size: 28rpx;
+}
+.container .reason-list .reason-item {
+  padding: 30rpx;
+  display: flex;
+  background-color: white;
+}
+.container .reason-list .reason-item .reason-radio {
+  margin-left: auto;
+}
+.container .reason-list .next-step {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+

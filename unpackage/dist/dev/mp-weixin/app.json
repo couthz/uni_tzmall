@@ -1,0 +1,78 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/logs/logs",
+    "pages/user/user",
+    "pages/basket/basket",
+    "pages/category/category",
+    "pages/search-page/search-page",
+    "pages/delivery-address/delivery-address",
+    "pages/editAddress/editAddress",
+    "pages/orderList/orderList",
+    "pages/order-detail/order-detail",
+    "pages/submit-order/submit-order",
+    "pages/binding-phone/binding-phone",
+    "pages/express-delivery/express-delivery",
+    "pages/pay-result/pay-result",
+    "pages/search-prod-show/search-prod-show",
+    "pages/prod/prod",
+    "pages/login/login",
+    "pages/prod-classify/prod-classify",
+    "pages/recent-news/recent-news",
+    "pages/news-detail/news-detail",
+    "pages/accountLogin/accountLogin",
+    "pages/register/register",
+    "pages/aftersale-apply/aftersale-type",
+    "pages/aftersale-apply/aftersale-info",
+    "pages/aftersale-apply/aftersale-reason",
+    "pages/aftersale-apply/aftersale-describe",
+    "pages/aftersale-detail/aftersale-detail",
+    "pages/aftersale-apply/aftersale-reason-chose",
+    "pages/aftersale-list/aftersale-list",
+    "pages/aftersale-delivery-submit/aftersale-delivery-submit"
+  ],
+  "subPackages": [],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "WeChat",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "selectedColor": "#3a86b9",
+    "color": "#b8b8b8",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "/static/images/tabbar/homepage.png",
+        "selectedIconPath": "/static/images/tabbar/homepage-sel.png"
+      },
+      {
+        "pagePath": "pages/category/category",
+        "text": "分类",
+        "iconPath": "/static/images/tabbar/category.png",
+        "selectedIconPath": "/static/images/tabbar/category-sel.png"
+      },
+      {
+        "pagePath": "pages/basket/basket",
+        "text": "购物车",
+        "iconPath": "/static/images/tabbar/basket.png",
+        "selectedIconPath": "/static/images/tabbar/basket-sel.png"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "text": "我的",
+        "iconPath": "/static/images/tabbar/user.png",
+        "selectedIconPath": "/static/images/tabbar/user-sel.png"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  },
+  "plugins": {},
+  "usingComponents": {}
+}

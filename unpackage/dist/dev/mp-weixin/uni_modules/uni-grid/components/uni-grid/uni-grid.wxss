@@ -1,0 +1,16 @@
+.uni-grid-wrap.data-v-aaae28a6 {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.uni-grid.data-v-aaae28a6 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.uni-grid--border.data-v-aaae28a6 {
+  position: relative;
+  z-index: 1;
+  border-left: 1px #D2D2D2 solid;
+}
+

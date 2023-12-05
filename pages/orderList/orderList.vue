@@ -4,11 +4,11 @@
 <view class="container">
   <!-- 头部菜单 -->
   <view class="order-tit">
-    <text @tap="onStsTap" data-sts="0" :class="sts==0?'on':''">全部</text>
-    <text @tap="onStsTap" data-sts="1" :class="sts==1?'on':''">待支付</text>
-    <text @tap="onStsTap" data-sts="2" :class="sts==2?'on':''">待发货</text>
-    <text @tap="onStsTap" data-sts="3" :class="sts==3?'on':''">待收货</text>
-    <text @tap="onStsTap" data-sts="5" :class="sts==5?'on':''">已完成</text>
+    <text @tap="onStsTap" data-sts=0 :class="sts==0?'on':''">全部</text>
+    <text @tap="onStsTap" data-sts=100 :class="sts==100?'on':''">待支付</text>
+    <text @tap="onStsTap" data-sts=101 :class="sts==101?'on':''">待发货</text>
+    <text @tap="onStsTap" data-sts=102 :class="sts==102?'on':''">待收货</text>
+    <text @tap="onStsTap" data-sts=103 :class="sts==103?'on':''">待评价</text>
   </view>
   <!-- end 头部菜单 -->
   <view class="main">
@@ -21,9 +21,9 @@
         <view class="order-num">
           <text>订单编号：{{item.orderNumber}}</text>
           <view class="order-state">
-            <text :class="'order-sts  ' + (item.status==1?'red':'') + '  ' + ((item.status==5||item.status==6)?'gray':'')">{{item.status==1?'待支付':(item.status==2?'待发货':(item.status==3?'待收货':(item.status==5?'已完成':'已取消')))}}</text>
+            <text class="order-sts   red">{{item.status==100?'待支付':(item.status==101?'待发货':(item.status==102?'待收货':(item.status==200?'交易关闭':'交易成功')))}}</text>
 
-            <view class="clear-btn" v-if="item.status==5 || item.status==6">
+            <view class="clear-btn" v-if="item.status==104 || item.status==200">
               <image src="/static/images/icon/clear-his.png" class="clear-list-btn" @tap="delOrderList" :data-ordernum="item.orderNumber"></image>
             </view>
           </view>
@@ -31,8 +31,8 @@
 
         <!-- 商品列表 -->
         <!-- 一个订单单个商品的显示 -->
-        <block v-if="item.orderItemDtos.length==1">
-          <block v-for="(prod, index2) in item.orderItemDtos" :key="index2">
+        <block v-if="item.orderItems.length==1">
+          <block v-for="(prod, index2) in item.orderItems" :key="index2">
             <view>
               <view class="item-cont" @tap="toOrderDetailPage" :data-ordernum="item.orderNumber">
                 <view class="prod-pic">
@@ -45,9 +45,9 @@
                   <view class="prod-info-cont">{{prod.skuName}}</view>
                   <view class="price-nums">
                     <text class="prodprice"><text class="symbol">￥</text>
-                    <text class="big-num">{{wxs.parsePrice(prod.price)[0]}}</text>
-                    <text class="small-num">.{{wxs.parsePrice(prod.price)[1]}}</text></text>
-                    <text class="prodcount">x{{prod.prodCount}}</text>
+                    <text class="big-num">{{ prod.price }}</text>
+                    </text>
+                    <text class="prodcount">x{{prod.itemCount}}</text>
                   </view>
                 </view>
               </view>
@@ -58,7 +58,7 @@
         <block v-else>
           <view class="item-cont" @tap="toOrderDetailPage" :data-ordernum="item.orderNumber">
             <scroll-view scroll-x="true" scroll-left="0" scroll-with-animation="false" class="categories">
-              <block v-for="(prod, index2) in item.orderItemDtos" :key="index2">
+              <block v-for="(prod, index2) in item.orderItems" :key="index2">
                 <view class="prod-pic">
                   <image :src="prod.pic"></image>
                 </view>
@@ -71,18 +71,17 @@
           <text class="prodcount">共1件商品</text>
           <view class="prodprice">合计：
             <text class="symbol">￥</text>
-            <text class="big-num">{{wxs.parsePrice(item.actualTotal)[0]}}</text>
-            <text class="small-num">.{{wxs.parsePrice(item.actualTotal)[1]}}</text>
+            <text class="big-num">{{item.totalPay}}</text>
           </view>
         </view>
         <!-- end 商品列表 -->
         <view class="prod-foot">
           <view class="btn">
-            <text v-if="item.status==1" class="button" @tap="onCancelOrder" :data-ordernum="item.orderNumber" hover-class="none">取消订单</text>
+            <text v-if="item.status==100" class="button" @tap="onCancelOrder" :data-ordernum="item.orderNumber" hover-class="none">取消订单</text>
             <!-- <text class="button warn" @tap :data-ordernum="item.orderNumber" hover-class="none">再次购买</text> -->
-            <text v-if="item.status==1" class="button warn" @tap="normalPay" :data-ordernum="item.orderNumber" hover-class="none">付款</text>
-            <text v-if="item.status==3 || item.status==5" class="button" @tap="toDeliveryPage" :data-ordernum="item.orderNumber" hover-class="none">查看物流</text>
-            <text v-if="item.status==3" class="button warn" @tap="onConfirmReceive" :data-ordernum="item.orderNumber" hover-class="none">确认收货</text>
+            <text v-if="item.status==100" class="button warn" @tap="normalPay" :data-ordernum="item.orderNumber" hover-class="none">付款</text>
+            <text v-if="item.status>=102 && item.status<=104" class="button" @tap="toDeliveryPage" :data-ordernum="item.orderNumber" hover-class="none">查看物流</text>
+            <text v-if="item.status==102" class="button warn" @tap="onConfirmReceive" :data-ordernum="item.orderNumber" hover-class="none">确认收货</text>
           </view>
         </view>
       </view>
@@ -173,32 +172,30 @@ export default {
      * 加载订单数据
      */
     loadOrderData: function (sts, current) {
+      console.log(sts);
       var ths = this;
       uni.showLoading(); //加载订单列表
 
       var params = {
-        url: "/p/myOrder/myOrder",
-        method: "GET",
+        url: "/order/order/orderPage",
+        method: "POST",
         data: {
-          current: current,
-          size: 10,
+          page: current,
+          limit: 10,
           status: sts
         },
         callBack: function (res) {
-          //console.log(res);
+          console.log(res);
           var list = [];
 
-          if (res.current == 1) {
-            list = res.records;
-          } else {
-            list = ths.list;
-            Array.prototype.push.apply(list, res.records);
-          }
+
+        Array.prototype.push.apply(list, res.items);
+          
 
           ths.setData({
             list: list,
-            pages: res.pages,
-            current: res.current
+            pages: res.meta.totalPages,
+            current: res.meta.currentPage
           });
           uni.hideLoading();
         }
@@ -305,7 +302,7 @@ export default {
 			  mask: true
 			});
 			var params = {
-			  url: "/p/order/normalPay",
+			  url: "/order/pay/normalPay",
 			  method: "POST",
 			  data: {
 			    orderNumbers: e.currentTarget.dataset.ordernum

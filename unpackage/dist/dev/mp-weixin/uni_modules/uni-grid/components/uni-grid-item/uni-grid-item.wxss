@@ -1,0 +1,26 @@
+.uni-grid-item.data-v-7b4a3849 {
+  height: 100%;
+  display: flex;
+}
+.uni-grid-item__box.data-v-7b4a3849 {
+  display: flex;
+  width: 100%;
+  position: relative;
+  flex: 1;
+  flex-direction: column;
+}
+.uni-grid-item--border.data-v-7b4a3849 {
+  position: relative;
+  z-index: 0;
+  border-bottom: 1px #D2D2D2 solid;
+  border-right: 1px #D2D2D2 solid;
+}
+.uni-grid-item--border-top.data-v-7b4a3849 {
+  position: relative;
+  border-top: 1px #D2D2D2 solid;
+  z-index: 0;
+}
+.uni-highlight.data-v-7b4a3849:active {
+  background-color: #f1f1f1;
+}
+

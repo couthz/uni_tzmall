@@ -1,198 +1,206 @@
 var config = require("./config.js"); //统一的网络请求方法
-var util = require("./util.js")
-import {
-	AppType
-} from './constant.js'
+var util = require("./util.js");
+var auth = require("./auth.js");
+import { http_url } from "../../../Desktop/svn源代码/sinohealthtec/yijiaan/trunk/yijiaan-miniprogram/utils/consts.js";
+import { AppType } from "./constant.js";
 
-function request(params, isGetTonken) {
+function request(params, isGetToken) {
+  console.log("开始请求:" + params);
   // 全局变量
   var globalData = getApp().globalData; // 如果正在进行登陆，就将非登陆请求放在队列中等待登陆完毕后进行调用
 
-  // if (!isGetTonken && globalData.isLanding) {
+  // if (!isGetToken && globalData.isLanding) {
   //   globalData.requestQueue.push(params);
   //   return;
   // }
 
-	if (Object.prototype.toString.call(params.data) == '[object Array]') {
-		params.data = JSON.stringify(params.data);
-	} else if (Object.prototype.toString.call(params.data) == '[object Number]') {
-		params.data = params.data + '';
-	}
-	var needToken = false
-	// if (params.url.indexOf("/p/") == 0 || params.url.indexOf("/user/registerOrBindUser") == 0) {
-	// 	needToken = true
-	// }
+  if (Object.prototype.toString.call(params.data) == "[object Array]") {
+    params.data = JSON.stringify(params.data);
+  } else if (Object.prototype.toString.call(params.data) == "[object Number]") {
+    params.data = params.data + "";
+  }
+  var needToken = false;
+  // if (params.url.indexOf("/p/") == 0 || params.url.indexOf("/user/registerOrBindUser") == 0) {
+  // 	needToken = true
+  // }
 
   wx.request({
     // url: config.domain + params.url,
-		url: (params.domain ? params.domain : config.domain) + params.url,
+    url: (params.domain ? params.domain : config.domain) + params.url,
     //接口请求地址
     data: params.data,
     header: {
       // 'content-type': params.method == "GET" ? 'application/x-www-form-urlencoded' : 'application/json;charset=utf-8',
       // 'Authorization': params.login ? undefined : uni.getStorageSync('token')
-			'Authorization': uni.getStorageSync('token') ,
+      Authorization: uni.getStorageSync("token"),
     },
     method: params.method == undefined ? "POST" : params.method,
-    dataType: 'json',
-    responseType: params.responseType == undefined ? 'text' : params.responseType,
+    dataType: "json",
+    responseType:
+      params.responseType == undefined ? "text" : params.responseType,
     success: function (res) {
-			const responseData = res.data
+      const responseData = res.data;
 
       // 00000 请求成功
-      if (responseData.code === '00000') {
+      if (responseData.code === 200) {
         if (params.callBack) {
+			console.log("请求成功")
           params.callBack(responseData.data);
         }
-        return
+        return;
       }
 
       // A00004 未授权
-      if (responseData.code === 'A00004') {
-				uni.removeStorageSync('loginResult');
-				uni.removeStorageSync('token');
-				// #ifdef H5
-				const ua = navigator.userAgent.toLowerCase();
-				if (ua.search(/MicroMessenger/i) > -1) uni.setStorageSync('appType', AppType.MP)
-				// #endif
-				uni.hideLoading();
-				if (!params.dontTrunLogin) {
-					if (uni.getStorageSync('hadLogin')) {
-						uni.showModal({
-							title: "提示",
-							content: "登录已过期",
-							cancelText: "取消",
-							confirmText: "确定",
-							success: res => {
-								if (res.confirm) {
-									// 跳转登录页面
-									var url = ''
-									// #ifdef H5 || MP-WEIXIN
-									if (uni.getStorageSync('appType') == AppType.MP || uni.getStorageSync('appType') == AppType.MINI) {
-										url = '/pages/login/login'
-									} else {
-										url = '/pages/accountLogin/accountLogin'
-									}
-									// #endif
+      if (responseData.code === 11001) {
+        console.log("登录过期");
+        uni.removeStorageSync("loginResult");
+        uni.removeStorageSync("token");
+        // #ifdef H5
+        const ua = navigator.userAgent.toLowerCase();
+        if (ua.search(/MicroMessenger/i) > -1)
+          uni.setStorageSync("appType", AppType.MP);
+        // #endif
 
-									// #ifdef APP-PLUS
-									var url = '/pages/accountLogin/accountLogin'
-									// #endif
-									uni.navigateTo({
-										url: url
-									})
-								} else {
-									uni.switchTab({
-										url: '/pages/index/index'
-									})
-								}
-							}
-						})
-					} else {
-						uni.showModal({
-							title: "提示",
-							content: "登录已过期",
-							cancelText: "取消",
-							confirmText: "确定",
-							success: res => {
-								if (res.confirm) {
-									// 跳转登录页面
-									// #ifdef H5
-									uni.navigateTo({
-										url: uni.getStorageSync('appType') == AppType.MP ? '/pages/login/login' : '/pages/accountLogin/accountLogin'
-									})
-									// #endif
+        auth
+          .wxLogin()
+          .then(() => {
+            //重新尝试
+            request(params);
+          })
+          .catch((err) => {
+            uni.hideLoading();
 
-									// #ifdef MP-WEIXIN
-									uni.navigateTo({
-										url: '/pages/login/login'
-									})
-									// #endif
-								} else {
-									uni.switchTab({
-										url: '/pages/index/index'
-									})
-								}
-							}
-						})
-				// 		// 跳转登录页面
-				// 		// #ifdef H5
-				// 		uni.navigateTo({
-				// 			url: uni.getStorageSync('appType') == AppType.MP ? '/pages/login/login' : '/pages/accountLogin/accountLogin'
-				// 		})
-				// 		// #endif
+            if (!params.dontTrunLogin) {
+              if (uni.getStorageSync("hadLogin")) {
+                uni.showModal({
+                  title: "提示",
+                  content: "登录已过期",
+                  cancelText: "取消",
+                  confirmText: "确定",
+                  success: (res) => {
+                    if (res.confirm) {
+                      // 跳转登录页面
+                      var url = "";
+                      // #ifdef H5 || MP-WEIXIN
+                      if (
+                        uni.getStorageSync("appType") == AppType.MP ||
+                        uni.getStorageSync("appType") == AppType.MINI
+                      ) {
+                        url = "/pages/login/login";
+                      } else {
+                        url = "/pages/accountLogin/accountLogin";
+                      }
+                      // #endif
 
-				// 		// #ifdef MP-WEIXIN
-				// 		uni.navigateTo({
-				// 			url: '/pages/login/login'
-				// 		})
-				// 		// #endif
-					}
-				}
-				return
-      }
+                      // #ifdef APP-PLUS
+                      var url = "/pages/accountLogin/accountLogin";
+                      // #endif
+                      uni.navigateTo({
+                        url: url,
+                      });
+                    } else {
+                      uni.switchTab({
+                        url: "/pages/index/index",
+                      });
+                    }
+                  },
+                });
+              } else {
+                uni.showModal({
+                  title: "提示",
+                  content: "登录已过期",
+                  cancelText: "取消",
+                  confirmText: "确定",
+                  success: (res) => {
+                    if (res.confirm) {
+                      // 跳转登录页面
+                      // #ifdef H5
+                      uni.navigateTo({
+                        url:
+                          uni.getStorageSync("appType") == AppType.MP
+                            ? "/pages/login/login"
+                            : "/pages/accountLogin/accountLogin",
+                      });
+                      // #endif
 
-      // A00005 服务器出了点小差
-      if (responseData.code === 'A00005') {
-        console.error('============== 请求异常 ==============')
-        console.log('接口: ', params.url)
-        console.log('异常信息: ', responseData)
-        console.error('============== 请求异常 ==============')
-        if (params.errCallBack) {
-          params.errCallBack(responseData)
-          return
-        }
-        uni.showToast({
-          title: '服务器出了点小差~',
-          icon: 'none'
-        })
+                      // #ifdef MP-WEIXIN
+                      uni.navigateTo({
+                        url: "/pages/login/login",
+                      });
+                      // #endif
+                    } else {
+                      uni.switchTab({
+                        url: "/pages/index/index",
+                      });
+                    }
+                  },
+                });
+                // 		// 跳转登录页面
+                // 		// #ifdef H5
+                // 		uni.navigateTo({
+                // 			url: uni.getStorageSync('appType') == AppType.MP ? '/pages/login/login' : '/pages/accountLogin/accountLogin'
+                // 		})
+                // 		// #endif
+
+                // 		// #ifdef MP-WEIXIN
+                // 		uni.navigateTo({
+                // 			url: '/pages/login/login'
+                // 		})
+                // 		// #endif
+              }
+            }
+          });
+
+        return;
       }
 
       // A00001 用于直接显示提示用户的错误，内容由输入内容决定
-      if (responseData.code === 'A00001') {
+      if (responseData.code === 10000) {
         if (params.errCallBack) {
-          params.errCallBack(responseData)
-          return
+          params.errCallBack(responseData);
+          return;
         }
         uni.showToast({
-          title: responseData.msg || 'Error',
-          icon: 'none'
-        })
-        return
+          title: responseData.msg || "Error",
+          icon: "none",
+        });
+        return;
       }
 
       // 其他异常
-      if (responseData.code !== '00000') {
+      if (responseData.code !== 200) {
         // console.log('params', params)
+		console.log(`接口: ${params.url}`);
+		console.log(`返回信息： `, res);
         if (params.errCallBack) {
-          params.errCallBack(responseData)
-        } else {
-          console.log(`接口: ${params.url}`)
-          console.log(`返回信息： `, res)
-        }
+          params.errCallBack(responseData);
+        } 
+		uni.showToast({
+		  title: res.message,
+		  icon: "none",
+		});
       }
-			
+
       if (!globalData.isLanding) {
         wx.hideLoading();
       }
     },
     fail: function (err) {
       uni.hideLoading();
-			if (err.errMsg == 'request:fail abort') {
-				console.log('请求被取消啦~')
-				return
-			}
-			setTimeout(() => {
-				uni.showToast({
-					// zheli
-					title: "服务器出了点小差",
-					icon: "none"
-				});
-			}, 1);
-    }
+      if (err.errMsg == "request:fail abort") {
+        console.log("请求被取消啦~");
+        return;
+      }
+      setTimeout(() => {
+        uni.showToast({
+          // zheli
+          title: "服务器出了点小差",
+          icon: "none",
+        });
+      }, 1);
+    },
   });
 } //通过code获取token,并保存到缓存
-
 
 var getToken = function () {
   // uni.login({
@@ -209,7 +217,6 @@ var getToken = function () {
   //         if (!result.nickName) {
   //           updateUserInfo();
   //         }
-
   //         if (result.userStutas == 0) {
   //           uni.showModal({
   //             showCancel: false,
@@ -220,10 +227,8 @@ var getToken = function () {
   //         } else {
   //           uni.setStorageSync('token', 'bearer' + result.access_token); //把token存入缓存，请求接口数据时要用
   //         }
-
   //         var globalData = getApp().globalData;
   //         globalData.isLanding = false;
-
   //         while (globalData.requestQueue.length) {
   //           request(globalData.requestQueue.pop());
   //         }
@@ -239,63 +244,63 @@ var getToken = function () {
  * @param {String} code  微信授权返回的code, 用于登录
  */
 var mpLogin = function (fn, code) {
-	// 发送 res.code 到后台换取 openId, sessionKey, unionId
-	request({
-		login: true,
-		url: '/appLogin',
-		data: {
-			principal: code,
-			appType: AppType.MP, // 登录类型
-		},
-		callBack: result => {
-			loginSuccess(result, fn)
-		}
-	}, true);
-
+  // 发送 res.code 到后台换取 openId, sessionKey, unionId
+  request(
+    {
+      login: true,
+      url: "/appLogin",
+      data: {
+        principal: code,
+        appType: AppType.MP, // 登录类型
+      },
+      callBack: (result) => {
+        loginSuccess(result, fn);
+      },
+    },
+    true
+  );
 };
 
-var getToken = function (fn) {
-
-};
+var getToken = function (fn) {};
 
 /**
  * 登录成功后执行
  * @param {Object} result  登录成功返回的数据
  * @param {Object} fn		登录成功后的回调
  */
-function loginSuccess (result, fn) {
-	// if (!result.enabled) {
-	// 	uni.showModal({
-	// 		showCancel: false,
-	// 		title: "提示",
-	// 		content: "您已被禁用，不能购买，请联系客服",
-	// 		cancelText: "取消",
-	// 		confirmText: "确定",
-	// 		success: function (res) {
+function loginSuccess(result, fn) {
+  // if (!result.enabled) {
+  // 	uni.showModal({
+  // 		showCancel: false,
+  // 		title: "提示",
+  // 		content: "您已被禁用，不能购买，请联系客服",
+  // 		cancelText: "取消",
+  // 		confirmText: "确定",
+  // 		success: function (res) {
   //       if (res.confirm) {
-	// 				wx.switchTab({
-	// 					url: '/pages/index/index'
-	// 				});
+  // 				wx.switchTab({
+  // 					url: '/pages/index/index'
+  // 				});
   //       }
-	// 		}
-	// 	})
-	// 	wx.setStorageSync('token', '');
-	// 	return
-	// }
+  // 		}
+  // 	})
+  // 	wx.setStorageSync('token', '');
+  // 	return
+  // }
 
-	// 保存登陆信息
-	wx.setStorageSync('loginResult', result)
-	// 保存成功登录标识,token过期判断
-	wx.setStorageSync('hadLogin', true)
-	// 没有获取到用户昵称，说明服务器没有保存用户的昵称，也就是用户授权的信息并没有传到服务器
-	// if (!result.pic) {
-	// 	updateUserInfo();
-	// }  
-	const expiresTimeStamp = result.expiresIn * 1000 / 2 + new Date().getTime()
+  // 保存登陆信息
+  wx.setStorageSync("loginResult", result);
+  // 保存成功登录标识,token过期判断
+  wx.setStorageSync("hadLogin", true);
+  // 没有获取到用户昵称，说明服务器没有保存用户的昵称，也就是用户授权的信息并没有传到服务器
+  // if (!result.pic) {
+  // 	updateUserInfo();
+  // }
+  const expiresTimeStamp = (result.expiresIn * 1000) / 2 + new Date().getTime();
   // 缓存token的过期时间
-  uni.setStorageSync('expiresTimeStamp', expiresTimeStamp)
+  uni.setStorageSync("expiresTimeStamp", expiresTimeStamp);
 
-	wx.setStorageSync('token', result.accessToken); //把token存入缓存，请求接口数据时要用
+  wx.setStorageSync("token", result.accessToken); //把token存入缓存，请求接口数据时要用
 
   // const routeUrlAfterLogin = uni.getStorageSync('routeUrlAfterLogin')
   // const pages = getCurrentPages()
@@ -308,17 +313,17 @@ function loginSuccess (result, fn) {
   // }
   // const prevPage = pages[pages.length - 2]
   // if (!prevPage) {
-	// 	wx.switchTab({
-	// 		url: '/pages/index/index'
-	// 	});
+  // 	wx.switchTab({
+  // 		url: '/pages/index/index'
+  // 	});
   //   return
   // }
   // // 判断上一页面是否为tabbar页面 (首页和分类页无需登录接口)
   // const isTabbar = prevPage.route === 'pages/user/user' || prevPage.route === 'pages/basket/basket'
   // if (isTabbar) {
-	// 	wx.switchTab({
-	// 		url: '/' + prevPage.route
-	// 	});
+  // 	wx.switchTab({
+  // 		url: '/' + prevPage.route
+  // 	});
   // } else {
   //   // 非tabbar页面
   //   let backDelata = 0
@@ -332,107 +337,106 @@ function loginSuccess (result, fn) {
   //       delta: backDelata
   //     })
   //   } else {
-	// 		wx.switchTab({
-	// 			url: '/pages/index/index'
-	// 		});
+  // 		wx.switchTab({
+  // 			url: '/pages/index/index'
+  // 		});
   //   }
   // }
 
-	if (fn) {
-		fn()
-	}
-};
+  if (fn) {
+    fn();
+  }
+}
 
 function updateUserInfo() {
   uni.getUserInfo({
-    success: res => {
+    success: (res) => {
       var userInfo = JSON.parse(res.rawData);
       request({
         url: "/p/user/setUserInfo",
         method: "PUT",
         data: {
           avatarUrl: userInfo.avatarUrl,
-          nickName: userInfo.nickName
-        }
+          nickName: userInfo.nickName,
+        },
       });
-    }
+    },
   });
 }
 
-function isUserAuthInfo () {
-	// 查看是否授权
-	wx.getSetting({
-		success (res) {
-			if (res.authSetting['scope.userInfo']) {
-				// 已经授权，可以直接调用 getUserInfo 获取头像昵称
-				wx.getUserInfo({
-					success: function (res) {
-						console.log(res.userInfo);
-					}
-				});
-			}
-		}
-	});
+function isUserAuthInfo() {
+  // 查看是否授权
+  wx.getSetting({
+    success(res) {
+      if (res.authSetting["scope.userInfo"]) {
+        // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+        wx.getUserInfo({
+          success: function (res) {
+            console.log(res.userInfo);
+          },
+        });
+      }
+    },
+  });
 }
 
-function mpAuthLogin (page, needCode) {
-	// 在微信环境打开,请求公众号网页登陆
-	var redirectUrl = null;
+function mpAuthLogin(page, needCode) {
+  // 在微信环境打开,请求公众号网页登陆
+  var redirectUrl = null;
 
-	if (!page) {
-		redirectUrl = window.location.href
-	} else {
-		var {
-			protocol,
-			host,
-			pathname,
-			hash
-		} = window.location
-		var redirectUrl = `${protocol}//${host}` + page
-	}
-	var scope = 'snsapi_userinfo'
-	window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + config.mpAppId +
-		'&redirect_uri=' +
-		encodeURIComponent(redirectUrl) + '&response_type=code&scope=' + scope + '&state=' + (needCode ? 'needCode' :
-			'unNeedCode') +
-		'#wechat_redirect'
-
+  if (!page) {
+    redirectUrl = window.location.href;
+  } else {
+    var { protocol, host, pathname, hash } = window.location;
+    var redirectUrl = `${protocol}//${host}` + page;
+  }
+  var scope = "snsapi_userinfo";
+  window.location.href =
+    "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
+    config.mpAppId +
+    "&redirect_uri=" +
+    encodeURIComponent(redirectUrl) +
+    "&response_type=code&scope=" +
+    scope +
+    "&state=" +
+    (needCode ? "needCode" : "unNeedCode") +
+    "#wechat_redirect";
 }
 
 /**
  * 获取购物车商品数量
  */
-function getCartCount () {
-	if (!uni.getStorageSync('token')) {
-		// wx.removeTabBarBadge({
-		// 	index: 2
-		// });
-		util.removeTabBadge()
-		return
-	}
-	var params = {
-		url: "/p/shopCart/prodCount",
-		method: "GET",
-		dontTrunLogin: true,
-		data: {},
-		callBack: function (res) {
-			if (res > 0) {
-				wx.setTabBarBadge({
-					index: 2,
-					text: res + ""
-				});
-				var app = getApp().globalData;
-				getApp().globalData.totalCartCount = res;
-			} else {
-				wx.removeTabBarBadge({
-					index: 2
-				});
-				var app = getApp().globalData;
-				getApp().globalData.totalCartCount = 0;
-			}
-		}
-	};
-	request(params);
+function getCartCount() {
+  if (!uni.getStorageSync("token")) {
+    // wx.removeTabBarBadge({
+    // 	index: 2
+    // });
+    util.removeTabBadge();
+    return;
+  }
+  var params = {
+    url: "/p/shopCart/prodCount",
+    method: "GET",
+    dontTrunLogin: true,
+    data: {},
+    callBack: function (res) {
+      if (res > 0) {
+        wx.setTabBarBadge({
+          index: 2,
+          text: res + "",
+        });
+        var app = getApp().globalData;
+        getApp().globalData.totalCartCount = res;
+      } else {
+        wx.removeTabBarBadge({
+          index: 2,
+        });
+        var app = getApp().globalData;
+        getApp().globalData.totalCartCount = 0;
+      }
+    },
+  };
+  request(params);
 }
 
 exports.getToken = getToken;

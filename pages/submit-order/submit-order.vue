@@ -1,54 +1,62 @@
 <template>
-<view>
-<!--pages/submit-order/submit-order.wxml-->
-<view class="container">
-  <view class="submit-order">
-    <!-- 收货地址 -->
-    <view class="delivery-addr " @tap="toAddrListPage">
-      <view class="addr-bg " v-if="!userAddr">
-        <view class="add-addr">
-          <view class="plus-sign-img">
-            <image src="/static/images/icon/plus-sign.png"></image>
+  <view>
+    <!--pages/submit-order/submit-order.wxml-->
+    <view class="container">
+      <view class="submit-order">
+        <!-- 收货地址 -->
+        <view class="delivery-addr" @tap="toAddrListPage">
+          <view class="addr-bg" v-if="!userAddr">
+            <view class="add-addr">
+              <view class="plus-sign-img">
+                <image src="/static/images/icon/plus-sign.png"></image>
+              </view>
+              <text>新增收货地址</text>
+            </view>
+            <view class="arrow empty"></view>
           </view>
-          <text>新增收货地址</text>
+          <view class="addr-bg whole" v-if="userAddr">
+            <view class="addr-icon">
+              <image src="/static/images/icon/addr.png"></image>
+            </view>
+            <view class="user-info">
+              <text class="item">{{ userAddr.receiver }}</text>
+              <text class="item">{{ userAddr.mobile }}</text>
+            </view>
+            <view class="addr"
+              >{{ userAddr.province }}{{ userAddr.city }}{{ userAddr.area
+              }}{{ userAddr.addr }}</view
+            >
+            <view class="arrow"></view>
+          </view>
         </view>
-        <view class="arrow empty"></view>
-      </view>
-      <view class="addr-bg whole" v-if="userAddr">
-        <view class="addr-icon">
-          <image src="/static/images/icon/addr.png"></image>
-        </view>
-        <view class="user-info">
-          <text class="item">{{userAddr.receiver}}</text>
-          <text class="item">{{userAddr.mobile}}</text>
-        </view>
-        <view class="addr">{{userAddr.province}}{{userAddr.city}}{{userAddr.area}}{{userAddr.addr}}</view>
-        <view class="arrow"></view>
-      </view>
-    </view>
 
-    <!-- 商品详情 -->
-    <view class="prod-item">
-      <block v-for="(item, index) in orderItems" :key="index">
-        <view class="item-cont" @tap="toOrderDetailPage" :data-ordernum="item.primaryOrderNo">
-          <view class="prod-pic">
-            <image :src="item.pic"></image>
-          </view>
-          <view class="prod-info">
-            <view class="prodname">
-              {{item.prodName}}
+        <!-- 商品详情 -->
+        <view class="prod-item">
+          <block v-for="(item, index) in orderItems" :key="index">
+            <view
+              class="item-cont"
+              @tap="toOrderDetailPage"
+              :data-ordernum="item.primaryOrderNo"
+            >
+              <view class="prod-pic">
+                <image :src="item.pic"></image>
+              </view>
+              <view class="prod-info">
+                <view class="prodname">
+                  {{ item.prodName }}
+                </view>
+                <view class="prod-info-cont">{{ item.skuName }}</view>
+                <view class="price-nums">
+                  <text class="prodprice"
+                    ><text class="symbol">￥</text>
+                    <text class="big-num">{{ item.price }}</text></text
+                  >
+                  <text class="prodcount">x{{ item.itemCount }}</text>
+                </view>
+              </view>
             </view>
-            <view class="prod-info-cont">{{item.skuName}}</view>
-            <view class="price-nums">
-              <text class="prodprice"><text class="symbol">￥</text>
-              <text class="big-num">{{wxs.parsePrice(item.price)[0]}}</text>
-              <text class="small-num">.{{wxs.parsePrice(item.price)[1]}}</text></text>
-              <text class="prodcount">x{{item.prodCount}}</text>
-            </view>
-          </view>
-        </view>
-      </block>
-      <!-- <view class='item-cont' bindtap='toOrderDetailPage' data-ordernum="{{item.primaryOrderNo}}">
+          </block>
+          <!-- <view class='item-cont' bindtap='toOrderDetailPage' data-ordernum="{{item.primaryOrderNo}}">
         <view class='prod-pic'>
           <image src='../../images/prod/pic09.jpg'></image>
         </view>
@@ -66,116 +74,140 @@
         </view>
       </view> -->
 
-      <view class="total-num">
-        <text class="prodcount">共{{totalCount}}件商品</text>
-        <view class="prodprice">合计：
-          <text class="symbol">￥</text>
-          <text class="big-num">{{wxs.parsePrice(total)[0]}}</text>
-          <text class="small-num">.{{wxs.parsePrice(total)[1]}}</text>
+          <view class="total-num">
+            <text class="prodcount">共{{ totalCount }}件商品</text>
+            <view class="prodprice"
+              >合计：
+              <text class="symbol">￥</text>
+              <text class="big-num">{{ total }}</text>
+            </view>
+          </view>
         </view>
+
+        <!-- 订单详情 -->
+        <view class="order-msg">
+          <view class="msg-item">
+            <view class="item coupon" @tap="showCouponPopup">
+              <text class="item-tit">优惠券：</text>
+              <text class="item-txt" v-if="!coupons.canUseCoupons"
+                >暂无可用</text
+              >
+              <text class="coupon-btn"
+                >{{ coupons.totalLength ? coupons.totalLength : 0 }}张</text
+              >
+              <text class="arrow"></text>
+            </view>
+            <view class="item">
+              <text>买家留言：</text>
+              <input v-model="remarks" placeholder="给卖家留言" />
+            </view>
+          </view>
+        </view>
+
+        <view class="order-msg">
+          <view class="msg-item">
+            <view class="item">
+              <view class="item-tit">订单总额：</view>
+              <view class="item-txt price">
+                <text class="symbol">￥</text>
+                <text class="big-num">{{ total }}</text>
+              </view>
+            </view>
+            <view class="item">
+              <view class="item-tit">运费：</view>
+              <view class="item-txt price">
+                <text class="symbol">￥</text>
+                <text class="big-num">{{ transfee || 0.00 }}</text>
+              </view>
+            </view>
+            <view class="item">
+              <view class="item-tit">优惠金额：</view>
+              <view class="item-txt price">
+                <text class="symbol">-￥</text>
+                <text class="big-num">{{ orderReduce }}</text>
+              </view>
+            </view>
+            <view class="item payment">
+              <view class="item-txt price">
+                小计：
+                <text class="symbol">￥</text>
+                <text class="big-num">{{ actualTotal }}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 底部栏 -->
+      <view class="submit-order-footer">
+        <view class="sub-order">
+          <view class="item-txt">
+            合计：
+            <view class="price">
+              <text class="symbol">￥</text>
+              <text class="big-num">{{ actualTotal }}</text>
+            </view>
+          </view>
+        </view>
+        <view class="footer-box" @tap="toPay"> 提交订单 </view>
       </view>
     </view>
 
-    <!-- 订单详情 -->
-    <view class="order-msg">
-      <view class="msg-item">
-        <view class="item coupon" @tap="showCouponPopup">
-          <text class="item-tit">优惠券：</text>
-          <text class="item-txt" v-if="!coupons.canUseCoupons">暂无可用</text>
-          <text class="coupon-btn">{{coupons.totalLength? coupons.totalLength: 0}}张</text>
-          <text class="arrow"></text>
+    <!-- 选择优惠券弹窗 -->
+    <view class="popup-hide" v-if="popupShow">
+      <view class="popup-box">
+        <view class="popup-tit">
+          <text>优惠券</text>
+          <text class="close" @tap="closePopup"></text>
         </view>
-        <view class="item">
-          <text>买家留言：</text>
-          <input v-model="remarks"  placeholder="给卖家留言"></input>
+        <view class="coupon-tabs">
+          <view
+            :class="'coupon-tab ' + (couponSts == 1 ? 'on' : '')"
+            @tap="changeCouponSts"
+            data-sts="1"
+            >可用优惠券({{
+              coupons.canUseCoupons.length ? coupons.canUseCoupons.length : 0
+            }})</view
+          >
+          <view
+            :class="'coupon-tab ' + (couponSts == 2 ? 'on' : '')"
+            @tap="changeCouponSts"
+            data-sts="2"
+            >不可用优惠券({{
+              coupons.unCanUseCoupons.length
+                ? coupons.unCanUseCoupons.length
+                : 0
+            }})</view
+          >
         </view>
-      </view>
+        <view class="popup-cnt">
+          <view v-if="couponSts === 1">
+            <block v-for="(item, index) in coupons.canUseCoupons" :key="index">
+              <coupon
+                :item="item"
+                order="true"
+                @checkCoupon="checkCoupon"
+                canUse="true"
+              ></coupon>
+            </block>
+          </view>
+          <view v-if="couponSts === 2">
+            <block
+              v-for="(item, index) in coupons.unCanUseCoupons"
+              :key="index"
+            >
+              <coupon :item="item" order="true" canUse="false"></coupon>
+            </block>
+          </view>
 
-    </view>
-
-    <view class="order-msg">
-      <view class="msg-item">
-        <view class="item">
-          <view class="item-tit">订单总额：</view>
-          <view class="item-txt price">
-            <text class="symbol">￥</text>
-            <text class="big-num">{{wxs.parsePrice(total)[0]}}</text>
-            <text class="small-num">.{{wxs.parsePrice(total)[1]}}</text>
-          </view>
+          <view class="botm-empty"></view>
         </view>
-        <view class="item">
-          <view class="item-tit">运费：</view>
-          <view class="item-txt price">
-            <text class="symbol">￥</text>
-            <text class="big-num">{{wxs.parsePrice(transfee)[0]}}</text>
-            <text class="small-num">.{{wxs.parsePrice(transfee)[1]}}</text>
-          </view>
-        </view>
-        <view class="item">
-          <view class="item-tit">优惠金额：</view>
-          <view class="item-txt price">
-            <text class="symbol">-￥</text>
-            <text class="big-num">{{wxs.parsePrice(shopReduce)[0]}}</text>
-            <text class="small-num">.{{wxs.parsePrice(shopReduce)[1]}}</text>
-          </view>
-        </view>
-        <view class="item payment">
-          <view class="item-txt price">
-            小计：
-            <text class="symbol">￥</text>
-            <text class="big-num">{{wxs.parsePrice(actualTotal)[0]}}</text>
-            <text class="small-num">.{{wxs.parsePrice(actualTotal)[1]}}</text>
-          </view>
+        <view class="coupon-ok" v-if="couponSts === 1">
+          <text @tap="choosedCoupon">确定</text>
         </view>
       </view>
     </view>
   </view>
-
-
-  <!-- 底部栏 -->
-  <view class="submit-order-footer">
-    <view class="sub-order">
-      <view class="item-txt">
-        合计：
-        <view class="price">
-          <text class="symbol">￥</text>
-          <text class="big-num">{{wxs.parsePrice(actualTotal)[0]}}</text>
-          <text class="small-num">.{{wxs.parsePrice(actualTotal)[1]}}</text>
-        </view>
-      </view>
-    </view>
-    <view class="footer-box" @tap="toPay">
-      提交订单
-    </view>
-  </view>
-</view>
-
-<!-- 选择优惠券弹窗 -->
-<view class="popup-hide" v-if="popupShow">
-  <view class="popup-box">
-    <view class="popup-tit">
-      <text>优惠券</text>
-      <text class="close" @tap="closePopup"></text>
-    </view>
-    <view class="coupon-tabs">
-      <view :class="'coupon-tab ' + (couponSts==1?'on':'')" @tap="changeCouponSts" data-sts="1">可用优惠券({{coupons.canUseCoupons.length?coupons.canUseCoupons.length:0}})</view>
-      <view :class="'coupon-tab ' + (couponSts==2?'on':'')" @tap="changeCouponSts" data-sts="2">不可用优惠券({{coupons.unCanUseCoupons.length?coupons.unCanUseCoupons.length:0}})</view>
-    </view>
-    <view class="popup-cnt">
-      <block v-for="(item, index) in coupons.canUseCoupons" :key="index" v-if="couponSts == 1">
-        <coupon :item="item" order="true" @checkCoupon="checkCoupon" canUse="true"></coupon>
-      </block>
-      <block v-for="(item, index) in coupons.unCanUseCoupons" :key="index" v-if="couponSts == 2">
-        <coupon :item="item" order="true" canUse="false"></coupon>
-      </block>
-      <view class="botm-empty"></view>
-    </view>
-    <view class="coupon-ok" v-if="couponSts==1">
-      <text @tap="choosedCoupon">确定</text>
-    </view>
-  </view>
-</view>
-</view>
 </template>
 
 <script module="wxs" lang="wxs" src="../../wxs/number.wxs"></script>
@@ -198,7 +230,7 @@ export default {
       coupon: {
         totalLength: 0,
         canUseCoupons: [],
-        noCanUseCoupons: []
+        noCanUseCoupons: [],
       },
       actualTotal: 0,
       total: 0,
@@ -208,14 +240,14 @@ export default {
       remarks: "",
       couponIds: [],
       coupons: {},
-      shopReduce: "",
+      orderReduce: 0,
       item: {},
-      selAddress: ''
+      selAddress: "",
     };
   },
 
   components: {
-    coupon
+    coupon,
   },
   props: {},
 
@@ -224,7 +256,7 @@ export default {
    */
   onLoad: function (options) {
     this.setData({
-      orderEntry: options.orderEntry
+      orderEntry: options.orderEntry,
     });
   },
 
@@ -241,7 +273,7 @@ export default {
     var currPage = pages[pages.length - 1];
     if (currPage.selAddress == "yes") {
       //将携带的参数赋值
-      this.userAddr = currPage.item
+      this.userAddr = currPage.item;
     }
 
     //获取订单数据
@@ -282,29 +314,31 @@ export default {
       }
 
       uni.showLoading({
-        mask: true
+        mask: true,
       });
       var params = {
-        url: "/p/order/confirm",
+        url: this.orderEntry === "1" ? "/order/order/buynowGetCheckOut" : "/order/order/shopcartGetCheckOut",
         method: "POST",
         data: {
           addrId: addrId,
-          orderItem: this.orderEntry === "1" ? JSON.parse(uni.getStorageSync("orderItem")) : undefined,
-          basketIds: this.orderEntry === "0" ? JSON.parse(uni.getStorageSync("basketIds")) : undefined,
-          couponIds: this.couponIds,
-          userChangeCoupon: 1
+          buynowSkuDTO:
+            this.orderEntry === "1"
+              ? JSON.parse(uni.getStorageSync("orderItem"))
+              : undefined,
+          shopcartItemIds:
+            this.orderEntry === "0"
+              ? JSON.parse(uni.getStorageSync("shopcartItemIds"))
+              : undefined,
         },
-        callBack: res => {
+        callBack: (res) => {
           uni.hideLoading();
           let orderItems = [];
-          res.shopCartOrders[0].shopCartItemDiscounts.forEach(itemDiscount => {
-            orderItems = orderItems.concat(itemDiscount.shopCartItems);
-          });
+          orderItems = orderItems.concat(res.checkOutSkuDTOs);
 
-          if (res.shopCartOrders[0].coupons) {
+          if (res.coupons) {
             let canUseCoupons = [];
             let unCanUseCoupons = [];
-            res.shopCartOrders[0].coupons.forEach(coupon => {
+            res.coupons.forEach((coupon) => {
               if (coupon.canUse) {
                 canUseCoupons.push(coupon);
               } else {
@@ -313,27 +347,27 @@ export default {
             });
             this.setData({
               coupons: {
-                totalLength: res.shopCartOrders[0].coupons.length,
+                totalLength: res.coupons.length,
                 canUseCoupons: canUseCoupons,
-                unCanUseCoupons: unCanUseCoupons
-              }
+                unCanUseCoupons: unCanUseCoupons,
+              },
             });
           }
 
           this.setData({
             orderItems: orderItems,
-            actualTotal: res.actualTotal,
+            actualTotal: res.totalPay,
             total: res.total,
             totalCount: res.totalCount,
             userAddr: res.userAddr,
-            transfee: res.shopCartOrders[0].transfee,
-            shopReduce: res.shopCartOrders[0].shopReduce
+            transfee: res.transfee,
+            orderReduce: res.orderReduce,
           });
         },
-        errCallBack: res => {
+        errCallBack: (res) => {
           uni.hideLoading();
           this.chooseCouponErrHandle(res);
-        }
+        },
       };
       http.request(params);
     },
@@ -348,11 +382,11 @@ export default {
           title: res.data,
           icon: "none",
           duration: 3000,
-          success: res => {
+          success: (res) => {
             this.setData({
-              couponIds: []
+              couponIds: [],
             });
-          }
+          },
         });
         setTimeout(() => {
           this.loadOrderData();
@@ -366,8 +400,8 @@ export default {
     toPay: function () {
       if (!this.userAddr) {
         uni.showToast({
-          title: '请选择地址',
-          icon: "none"
+          title: "请选择地址",
+          icon: "none",
         });
         return;
       }
@@ -376,76 +410,68 @@ export default {
     },
     submitOrder: function () {
       uni.showLoading({
-        mask: true
+        mask: true,
       });
       var params = {
-        url: "/p/order/submit",
+        url: "/order/order/submit",
         method: "POST",
         data: {
-          orderShopParam: [{
+          orderSubmitParam: {
             remarks: this.remarks,
-            shopId: 1
-          }]
+          },
         },
-        callBack: res => {
-					console.log("res",res)
+        callBack: (res) => {
+          console.log("res", res);
           uni.hideLoading();
-          // this.calWeixinPay(res.orderNumbers);
-					this.normalPay(res.orderNumbers)
-					
-        }
+          // this.calWeixinPay(res.orderNumber);
+          this.normalPay(res.orderNumber);
+        },
       };
       http.request(params);
     },
-		
-		//模拟支付，直接提交成功
-		normalPay: function(orderNumbers){
-			uni.showLoading({
-			  mask: true
+
+    //模拟支付，直接提交成功
+    normalPay: function (orderNumbers) {
+      uni.showLoading({
+        mask: true,
+      });
+      var params = {
+        url: "/order/pay/normalPay",
+        method: "POST",
+        data: {
+          orderNumbers: orderNumbers,
+        },
+        callBack: () => {
+            uni.hideLoading();
+			uni.showToast({
+			  title: "模拟支付成功",
+			  icon: "none",
 			});
-			var params = {
-			  url: "/p/order/normalPay",
-			  method: "POST",
-			  data: {
-			    orderNumbers: orderNumbers
-			  },
-			  callBack: res => {
-					console.log("res",res)
-					uni.hideLoading();
-					if(res){
-						uni.showToast({
-							title: "模拟支付成功",
-							icon:"none"
-						})
-						setTimeout(() => {
-							uni.navigateTo({
-							  url: '/pages/pay-result/pay-result?sts=1&orderNumbers=' + orderNumbers
-							});
-						},1200)
-					}else{
-						uni.showToast({
-							title: "支付失败！",
-							icon:"none"
-						})
-					}
-			  }
-			};
-			http.request(params);
-		},
-		
+			setTimeout(() => {
+			  uni.navigateTo({
+				url:
+				  "/pages/pay-result/pay-result?sts=1&orderNumbers=" +
+				  orderNumbers,
+			  });
+			}, 1200);
+        },
+      };
+      http.request(params);
+    },
+
     /**
      * 唤起微信支付
      */
     calWeixinPay: function (orderNumbers) {
       uni.showLoading({
-        mask: true
+        mask: true,
       });
       var params = {
         url: "/p/order/pay",
         method: "POST",
         data: {
           payType: 1,
-          orderNumbers: orderNumbers
+          orderNumbers: orderNumbers,
         },
         callBack: function (res) {
           uni.hideLoading();
@@ -455,35 +481,43 @@ export default {
             package: res.packageValue,
             signType: res.signType,
             paySign: res.paySign,
-            success: e => {
+            success: (e) => {
               // console.log("支付成功");
               uni.navigateTo({
-                url: '/pages/pay-result/pay-result?sts=1&orderNumbers=' + orderNumbers + "&orderType=" + this.orderType
+                url:
+                  "/pages/pay-result/pay-result?sts=1&orderNumbers=" +
+                  orderNumbers +
+                  "&orderType=" +
+                  this.orderType,
               });
             },
-            fail: err => {
+            fail: (err) => {
               uni.navigateTo({
-                url: '/pages/pay-result/pay-result?sts=0&orderNumbers=' + orderNumbers + "&orderType=" + this.orderType
+                url:
+                  "/pages/pay-result/pay-result?sts=0&orderNumbers=" +
+                  orderNumbers +
+                  "&orderType=" +
+                  this.orderType,
               });
-            }
+            },
           });
-        }
+        },
       };
       http.request(params);
     },
     changeCouponSts: function (e) {
       this.setData({
-        couponSts: e.currentTarget.dataset.sts
+        couponSts: e.currentTarget.dataset.sts,
       });
     },
     showCouponPopup: function () {
       this.setData({
-        popupShow: true
+        popupShow: true,
       });
     },
     closePopup: function () {
       this.setData({
-        popupShow: false
+        popupShow: false,
       });
     },
 
@@ -492,7 +526,7 @@ export default {
      */
     toAddrListPage: function () {
       uni.navigateTo({
-        url: '/pages/delivery-address/delivery-address?order=0'
+        url: "/pages/delivery-address/delivery-address?order=0",
       });
     },
 
@@ -502,7 +536,7 @@ export default {
     choosedCoupon: function () {
       this.loadOrderData();
       this.setData({
-        popupShow: false
+        popupShow: false,
       });
     },
 
@@ -518,8 +552,8 @@ export default {
       } else {
         ths.couponIds.splice(index, 1);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
