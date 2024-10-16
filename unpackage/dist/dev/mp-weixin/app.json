@@ -7,6 +7,7 @@
     "pages/category/category",
     "pages/search-page/search-page",
     "pages/delivery-address/delivery-address",
+    "pages/order-address/order-address",
     "pages/editAddress/editAddress",
     "pages/orderList/orderList",
     "pages/order-detail/order-detail",
@@ -21,15 +22,7 @@
     "pages/recent-news/recent-news",
     "pages/news-detail/news-detail",
     "pages/accountLogin/accountLogin",
-    "pages/register/register",
-    "pages/aftersale-apply/aftersale-type",
-    "pages/aftersale-apply/aftersale-info",
-    "pages/aftersale-apply/aftersale-reason",
-    "pages/aftersale-apply/aftersale-describe",
-    "pages/aftersale-detail/aftersale-detail",
-    "pages/aftersale-apply/aftersale-reason-chose",
-    "pages/aftersale-list/aftersale-list",
-    "pages/aftersale-delivery-submit/aftersale-delivery-submit"
+    "pages/register/register"
   ],
   "subPackages": [],
   "window": {

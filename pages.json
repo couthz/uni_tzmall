@@ -34,6 +34,7 @@
         {
             "path" : "pages/category/category",
             "style" : {
+                "backgroundColor": "#FFFFFF",
                 "backgroundTextStyle" : "light",
                 "navigationBarBackgroundColor" : "#fff",
                 "navigationBarTitleText" : "分类商品",
@@ -55,6 +56,15 @@
                 "backgroundTextStyle" : "light",
                 "navigationBarBackgroundColor" : "#fff",
                 "navigationBarTitleText" : "收货地址",
+                "navigationBarTextStyle" : "black"
+            }
+        },
+        {
+            "path" : "pages/order-address/order-address",
+            "style" : {
+                "backgroundTextStyle" : "light",
+                "navigationBarBackgroundColor" : "#fff",
+                "navigationBarTitleText" : "修改收货地址",
                 "navigationBarTextStyle" : "black"
             }
         },
@@ -119,6 +129,7 @@
                 "navigationBarBackgroundColor" : "#fff",
                 "navigationBarTitleText" : "支付结果",
                 "navigationBarTextStyle" : "black"
+
             }
         },
         {
@@ -128,12 +139,16 @@
                 "navigationBarBackgroundColor" : "#fff",
                 "navigationBarTitleText" : "搜索结果",
                 "navigationBarTextStyle" : "black"
+
             }
         },
         {
             "path" : "pages/prod/prod",
             "style" : {
-                "navigationBarTitleText" : "商品详情"
+                "navigationBarTitleText" : "商品详情",
+                "app-plus": {
+                    "bounce": "none"
+                }
             }
         },
         {
@@ -169,67 +184,67 @@
         },
         {
             "path" : "pages/register/register"
-        },
-        {
-            "path" : "pages/aftersale-apply/aftersale-type",
-            "style" : {}
-        },
-        {
-            "path" : "pages/aftersale-apply/aftersale-info",
-            "style" : {}
         }
-        ,{
-            "path" : "pages/aftersale-apply/aftersale-reason",
-            "style" :                                                                                    
-            {
-            }
+        // {
+        //     "path" : "pages/aftersale-apply/aftersale-type",
+        //     "style" : {}
+        // },
+        // {
+        //     "path" : "pages/aftersale-apply/aftersale-info",
+        //     "style" : {}
+        // }
+        // ,{
+        //     "path" : "pages/aftersale-apply/aftersale-reason",
+        //     "style" :                                                                                    
+        //     {
+        //     }
             
-        }
-        ,{
-            "path" : "pages/aftersale-apply/aftersale-describe",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
+        // }
+        // ,{
+        //     "path" : "pages/aftersale-apply/aftersale-describe",
+        //     "style" :                                                                                    
+        //     {
+        //         "navigationBarTitleText": "",
+        //         "enablePullDownRefresh": false
+        //     }
             
-        }
-        ,{
-            "path" : "pages/aftersale-detail/aftersale-detail",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
+        // }
+        // ,{
+        //     "path" : "pages/aftersale-detail/aftersale-detail",
+        //     "style" :                                                                                    
+        //     {
+        //         "navigationBarTitleText": "",
+        //         "enablePullDownRefresh": false
+        //     }
             
-        }
-        ,{
-            "path" : "pages/aftersale-apply/aftersale-reason-chose",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
+        // }
+        // ,{
+        //     "path" : "pages/aftersale-apply/aftersale-reason-chose",
+        //     "style" :                                                                                    
+        //     {
+        //         "navigationBarTitleText": "",
+        //         "enablePullDownRefresh": false
+        //     }
             
-        }
-        ,{
-            "path" : "pages/aftersale-list/aftersale-list",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
+        // }
+        // ,{
+        //     "path" : "pages/aftersale-list/aftersale-list",
+        //     "style" :                                                                                    
+        //     {
+        //         "navigationBarTitleText": "",
+        //         "enablePullDownRefresh": false
+        //     }
             
-        }
-        ,{
-            "path" : "pages/aftersale-delivery-submit/aftersale-delivery-submit",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
+        // }
+        // ,{
+        //     "path" : "pages/aftersale-delivery-submit/aftersale-delivery-submit",
+        //     "style" :                                                                                    
+        //     {
+        //         "navigationBarTitleText": "",
+        //         "enablePullDownRefresh": false
+        //     }
             
-        }
+        // }
     ],
     "tabBar" : {
         "selectedColor" : "#3a86b9",
@@ -267,6 +282,7 @@
         "navigationBarBackgroundColor" : "#fff",
         "navigationBarTitleText" : "WeChat",
         "navigationBarTextStyle" : "black"
+        
     },
 	"condition" : { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)

@@ -1,4 +1,3 @@
-
 .prod-items {
   width: 43%;
   /* float: left; */
@@ -13,8 +12,8 @@ prod:nth-child(2n) .prod-items {
   padding: 20rpx 20rpx 10rpx 10rpx;
 }
 .hot-imagecont .hotsaleimg {
- width:100%;
-  height:345rpx;
+  width: 100%;
+  height: 345rpx;
 }
 .hot-text .hotprod-text {
   height: 76rpx;
@@ -50,10 +49,10 @@ prod:nth-child(2n) .prod-items {
   font-family: Arial;
 }
 .prod-items .hot-text .prod-text-info .price {
-  color: #eb2444;
+  color: #ec6817;
   padding-left: 20rpx;
 }
-.deadline-price{
+.deadline-price {
   font-size: 22rpx;
   margin-right: 5rpx;
 }

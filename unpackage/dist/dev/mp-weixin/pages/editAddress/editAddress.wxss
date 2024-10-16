@@ -59,23 +59,25 @@ page {
 .btn-box text {
   font-size: 30rpx;
 }
-.btn-box .clear.btn, .keep.btn {
+.btn-box .clear.btn,
+.keep.btn {
   width: 60%;
   height: 80rpx;
   line-height: 80rpx;
   margin: auto;
   text-align: center;
-  border: 1rpx solid #eb2444;
+  border: 1rpx solid #ec6817;
   border-radius: 50rpx;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 1px 0 rgba(255, 255, 255, 0.3);
 }
 .btn-box .keep {
   color: #fff;
-  background-color: #eb2444;
+  background-color: #ec6817;
 }
 .btn-box .clear.btn {
   margin-top: 40rpx;
-  color: #eb2444;
+  color: #ec6817;
   background-color: #f8f0f1b6;
 }
 

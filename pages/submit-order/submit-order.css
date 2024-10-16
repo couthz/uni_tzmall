@@ -17,8 +17,8 @@ page {
 }
 
 .delivery-addr .addr-bg .add-addr .plus-sign {
-  color: #eb2444;
-  border: 2rpx solid #eb2444;
+  color: #ec6817;
+  border: 2rpx solid #ec6817;
   padding: 0rpx 6rpx;
   margin-right: 10rpx;
 }
@@ -79,7 +79,7 @@ page {
   width: 90%;
   padding-bottom: 20rpx;
   margin-top: 15rpx;
-  word-wrap:break-word;
+  word-wrap: break-word;
 }
 
 .submit-order .delivery-addr .arrow {
@@ -117,9 +117,13 @@ page {
   font-size: 28rpx;
 }
 
-.prod-item .item-cont .prod-pic image {
-  width: 180rpx;
-  height: 180rpx;
+.prod-item .item-cont .prod-pic .prod-pic-image {
+  width: 150rpx;
+  height: 150rpx;
+  border-radius: 8rpx;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
 }
 
 .prod-item .order-num {
@@ -221,7 +225,7 @@ page {
   word-break: break-all;
 }
 
-.prod-item  .total-num {
+.prod-item .total-num {
   text-align: right;
   padding: 20rpx 30rpx;
   font-size: 28rpx;
@@ -232,7 +236,7 @@ page {
   bottom: 0;
 }
 
-.prod-item  .price-nums .prodcount {
+.prod-item .price-nums .prodcount {
   position: absolute;
   bottom: 5rpx;
   right: 0;
@@ -276,7 +280,7 @@ page {
 
 .order-msg .msg-item .item.payment {
   border-top: 2rpx solid #f1f1f1;
-  color: #eb2444;
+  color: #ec6817;
 }
 
 .order-msg .msg-item .item .item-tit {
@@ -309,7 +313,7 @@ page {
   flex: 1;
 }
 
-.order-msg .msg-item .item  .coupon-btn {
+.order-msg .msg-item .item .coupon-btn {
   display: block;
   margin: 0 30rpx;
   line-height: 28rpx;
@@ -360,7 +364,7 @@ page {
 .submit-order-footer .footer-box {
   padding: 0 10rpx;
   width: 200rpx;
-  background: #eb2444;
+  background: #ec6817;
   text-align: center;
   line-height: 100rpx;
   color: #fff;
@@ -368,7 +372,7 @@ page {
 
 .submit-order-footer .sub-order .item-txt .price {
   display: inline;
-  color: #eb2444;
+  color: #ec6817;
   font-size: 28rpx;
 }
 
@@ -439,7 +443,7 @@ page {
 }
 
 .coupon-tab.on {
-  border-bottom: 2px solid #eb2444;
+  border-bottom: 2px solid #ec6817;
   font-weight: 600;
 }
 
@@ -469,9 +473,9 @@ page {
   line-height: 20px;
   width: 450rpx;
   padding: 7px;
-  background: -o-linear-gradient(right, #f45c43, #eb2444);
-  background: linear-gradient(right, #f45c43, #eb2444);
-  background: -webkit-linear-gradient(right, #f45c43, #eb2444);
+  background: -o-linear-gradient(right, #f45c43, #ec6817);
+  background: linear-gradient(right, #f45c43, #ec6817);
+  background: -webkit-linear-gradient(right, #f45c43, #ec6817);
   color: #fff;
   box-shadow: -1px 3px 3px #aaa;
 }
@@ -491,8 +495,8 @@ checkbox .wx-checkbox-input {
 /*checkbox选中后样式  */
 
 checkbox .wx-checkbox-input.wx-checkbox-input-checked {
-  background: #eb2444;
-  border-color: #eb2444;
+  background: #ec6817;
+  border-color: #ec6817;
 }
 
 /*checkbox选中后图标样式  */

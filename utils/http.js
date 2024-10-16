@@ -161,7 +161,7 @@ function request(params, isGetToken) {
           return;
         }
         uni.showToast({
-          title: responseData.msg || "Error",
+          title: responseData.message || "Error",
           icon: "none",
         });
         return;
@@ -415,7 +415,7 @@ function getCartCount() {
     return;
   }
   var params = {
-    url: "/p/shopCart/prodCount",
+    url: "/shopcart/shopcartItem/prodCount",
     method: "GET",
     dontTrunLogin: true,
     data: {},

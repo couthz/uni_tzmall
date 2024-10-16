@@ -29,8 +29,8 @@ page {
 }
 
 .order-tit text.on {
-  border-bottom: 4rpx solid #eb2444;
-  color: #eb2444;
+  border-bottom: 4rpx solid #ec6817;
+  color: #ec6817;
 }
 
 /*  end 头部菜单 */
@@ -57,6 +57,10 @@ page {
   display: flex;
   justify-content: space-between;
   font-size: 28rpx;
+}
+
+.order-num-title {
+  color: #999;
 }
 
 .order-state {
@@ -160,7 +164,7 @@ page {
   word-break: break-all;
 }
 
-.prod-item  .total-num {
+.prod-item .total-num {
   text-align: right;
   padding: 20rpx 30rpx;
   font-size: 28rpx;
@@ -172,7 +176,7 @@ page {
   bottom: 0;
 }
 
-.prod-item  .price-nums .prodcount {
+.prod-item .price-nums .prodcount {
   position: absolute;
   bottom: 5rpx;
   right: 0;
@@ -189,19 +193,19 @@ page {
   margin-right: 20rpx;
 }
 
-.prod-item  .prod-foot {
+.prod-item .prod-foot {
   /* padding: 20rpx 30rpx; */
   border-top: 2rpx solid #e6e6e6;
 }
 
-.prod-item  .prod-foot .total {
+.prod-item .prod-foot .total {
   font-size: 25rpx;
   margin-bottom: 20rpx;
   padding-bottom: 20rpx;
   border-bottom: 2rpx solid #e9eaec;
 }
 
-.prod-item  .prod-foot .btn {
+.prod-item .prod-foot .btn {
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -236,8 +240,8 @@ page {
 }
 
 .button.warn {
-  color: #eb2444;
-  border-color: #eb2444;
+  color: #ec6817;
+  border-color: #ec6817;
 }
 
 /* end 商品列表 */
@@ -254,7 +258,7 @@ page {
 /* 根据状态显示不同的颜色 */
 
 .order-state .order-sts.red {
-  color: #eb2444;
+  color: #ec6817;
 }
 
 .order-state .order-sts.gray {

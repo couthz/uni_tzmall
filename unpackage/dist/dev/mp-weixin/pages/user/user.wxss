@@ -12,9 +12,8 @@ page {
   text-align: center;
   padding: 30rpx 0;
 }
-.userinfo .userinfo-con{
-	width: 240rpx;
-	margin: auto;
+.userinfo .userinfo-con {
+  display: flex;
 }
 .userinfo .userinfo-con .userinfo-avatar {
   overflow: hidden;
@@ -23,22 +22,23 @@ page {
   height: 160rpx;
   border-radius: 50%;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
-  margin: auto;
+  margin-left: 50rpx;
+  margin-right: 50rpx;
 }
-.userinfo .userinfo-con .userinfo-avatar image{
+.userinfo .userinfo-con .userinfo-avatar image {
   width: 160rpx;
   height: 160rpx;
 }
 .userinfo .userinfo-con .userinfo-name {
-  font-size: 30rpx;
+  font-size: 35rpx;
   font-weight: bold;
   margin-top: 20rpx;
-	overflow: hidden;
-	display: -webkit-box;
-	-webkit-line-clamp: 1;
-	-webkit-box-orient: vertical;
-	text-overflow: ellipsis;
-	word-break: break-all;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  word-break: break-all;
 }
 
 /** 未登录信息 */
@@ -48,24 +48,24 @@ page {
   background: #fff;
   align-items: center;
 }
-.userinfo-none .default-pic{
-  padding-right:30rpx;
+.userinfo-none .default-pic {
+  padding-right: 30rpx;
 }
-.userinfo-none .default-pic image{
-  width:160rpx;
-  height:160rpx;
+.userinfo-none .default-pic image {
+  width: 160rpx;
+  height: 160rpx;
 }
-.none-login button{
+.none-login button {
   background: #fff;
 }
-.none-login button::after{
-  border:0;
+.none-login button::after {
+  border: 0;
 }
-.none-login .unlogin{
-  font-size:30rpx;
+.none-login .unlogin {
+  font-size: 30rpx;
 }
-.none-login .click-login{
-  font-size:26rpx;
+.none-login .click-login {
+  font-size: 26rpx;
   color: #777;
 }
 .none-login .unlogin,
@@ -96,7 +96,6 @@ page {
 
 /* 订单状态 */
 .list-cont {
-  
   width: 100%;
   background: #f7f7f7;
   margin-top: 20rpx;
@@ -112,7 +111,7 @@ page {
   height: 80rpx;
   line-height: 80rpx;
   font-size: 30rpx;
-  border-bottom:1px solid #f7f7f7;
+  border-bottom: 1px solid #f7f7f7;
   padding: 0 30rpx;
 }
 .list-cont .total-order .order-tit .checkmore {
@@ -143,8 +142,8 @@ page {
   position: absolute;
   top: -15rpx;
   right: -12rpx;
-  color: #eb2444;
-  border: 3rpx solid #eb2444;
+  color: #ec6817;
+  border: 3rpx solid #ec6817;
   border-radius: 50rpx;
   background: #fff;
   min-width: 30rpx;
@@ -161,7 +160,7 @@ page {
 .list-cont .my-menu {
   /* width: 100%; */
   background-color: #fff;
-  margin-top:20rpx;
+  margin-top: 20rpx;
 }
 .list-cont .my-menu .memu-item {
   display: flex;
@@ -169,7 +168,7 @@ page {
   justify-content: space-between;
   height: 100rpx;
   border-bottom: 2rpx solid #f7f7f7;
-  padding:0 30rpx;
+  padding: 0 30rpx;
 }
 .list-cont .my-menu .memu-item:nth-child(1) {
   border-top: 2rpx solid #f7f7f7;
@@ -180,12 +179,12 @@ page {
 .list-cont .my-menu .memu-item text {
   font-size: 28rpx;
 }
-.list-cont .my-menu .memu-item image{
-  width:50rpx;
-  height:50rpx;
-  margin-right:20rpx;
+.list-cont .my-menu .memu-item image {
+  width: 50rpx;
+  height: 50rpx;
+  margin-right: 20rpx;
 }
-.list-cont .my-menu .memu-item .i-name{
+.list-cont .my-menu .memu-item .i-name {
   display: flex;
   align-items: center;
 }
@@ -204,45 +203,118 @@ page {
 }
 
 /* 商品收藏消息等 */
-.prod-col{
-  margin-top:20rpx;
+.prod-col {
+  margin-top: 20rpx;
   background: #fff;
   display: flex;
   justify-content: space-around;
-  padding:30rpx 0 10rpx 0;
+  padding: 30rpx 0 10rpx 0;
   font-size: 12px;
 }
-.prod-col .col-item{
+.prod-col .col-item {
   text-align: center;
 }
-.prod-col .col-item .num{
+.prod-col .col-item .num {
   font-size: 16px;
-    font-weight: 700;
-    color: #3a86b9;
+  font-weight: 700;
+  color: #3a86b9;
 }
-.prod-col .col-item .tit{
+.prod-col .col-item .tit {
   line-height: 34px;
 }
 
 /* 退出登录 */
-.log-out{
-	padding:20rpx;
-	text-align: center;
-	margin-top:20rpx;
+.log-out {
+  padding: 20rpx;
+  text-align: center;
+  margin-top: 20rpx;
 }
-.log-out-n{
-	font-size: 30rpx;
-	margin: auto;
-	width:200rpx;
-	padding:20rpx;
-	border-radius: 10rpx;
-	background: #e43130;
-	color:#ffffff;
+.log-out-n {
+  font-size: 30rpx;
+  margin: auto;
+  width: 200rpx;
+  padding: 20rpx;
+  border-radius: 10rpx;
+  background: #e43130;
+  color: #ffffff;
 }
 button.memu-btn.memu-item {
   background-color: #fff;
 }
 button.memu-btn.memu-item:after {
   border: 0;
+}
+.container .get-userInfo {
+  border-style: dashed;
+  border-width: 1rpx;
+  border-color: #e24b4b;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 999;
+  background-color: white;
+  padding: 50rpx;
+  box-sizing: border-box; /* 使用border-box盒模型 */
+}
+.container .get-userInfo .info-item {
+  margin-top: 40rpx;
+}
+.container .get-userInfo .head-title {
+  font-weight: bold;
+  display: flex;
+  align-items: center; /* 垂直居中 */
+}
+.container .get-userInfo .head-title image {
+  width: 80rpx;
+  height: 80rpx;
+  margin-right: 30rpx;
+}
+.container .get-userInfo .apply-title {
+  font-weight: bold;
+}
+.container .get-userInfo .avatar {
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  border-bottom: 1px solid #edebeb;
+  font-size: 35rpx;
+  padding-bottom: 40rpx;
+}
+.container .get-userInfo .avatar .avatar-input button {
+  margin-left: 30rpx;
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+  background-color: white;
+}
+.container .get-userInfo .avatar .avatar-input button::after {
+  border: none;
+}
+.container .get-userInfo .avatar .avatar-input image {
+  width: 70rpx;
+  height: 70rpx;
+}
+.container .get-userInfo .nick-name {
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  font-size: 35rpx;
+  border-bottom: 1px solid #edebeb;
+  padding-bottom: 40rpx;
+}
+.container .get-userInfo .nick-name .nick-name-input {
+  color: gray;
+  font-size: 32rpx;
+  margin-left: 60rpx;
+}
+.container .get-userInfo .random {
+  color: #475b82;
+  font-size: 32rpx;
+}
+.container .get-userInfo .confirm {
+  font-size: 32rpx;
+}
+.container .get-userInfo .cancel {
+  font-size: 32rpx;
 }
 

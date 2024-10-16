@@ -1,0 +1,66 @@
+.prod-item {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  /* border-radius: 10rpx; */
+  background: #fff;
+  overflow: hidden;
+
+  /* box-shadow: 0rpx 6rpx 8rpx rgba(58, 134, 185, 0.2); */
+}
+
+.prod-item .imagecont {
+  width: 100%;
+  height: 70%;
+  max-height: 70%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
+}
+
+.prod-item .prod-text {
+  font-size: 24rpx;
+  font-weight: 600;
+  height: 8%;
+  max-height: 8%;
+  overflow: hidden;
+  margin: 10rpx 0;
+  display: -webkit-box;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  color: #000;
+  padding-bottom: 10rpx;
+}
+
+.prod-item .prod-brief {
+  font-size: 22rpx;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 0 10rpx;
+  padding-bottom: 10rpx;
+  text-overflow: ellipsis;
+}
+
+.prod-item .prod-price {
+  font-size: 23rpx;
+  font-family: Arial;
+}
+
+.prod-item .prod-price .big-num {
+  font-size: 26rpx;
+  font-family: Arial;
+}
+
+.prod-item .basket-img {
+  width: 50rpx;
+  height: 50rpx;
+  position: absolute;
+  right: 0;
+  bottom: 7rpx;
+  /* border: 2rpx solid #EC6817;
+  border-radius: 50%; */
+  padding: 8rpx;
+}

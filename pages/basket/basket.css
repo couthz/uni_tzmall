@@ -7,9 +7,52 @@ page {
 .container {
   padding-bottom: 118rpx;
 }
-container .prod-list {
+.container .head-title {
   width: 100%;
-  background: #f8f8f8;
+  height: 50rpx;
+  padding-top: 15rpx;
+  padding-bottom: 15rpx;
+  display: flex;
+  align-items: center;
+  background-color: white;
+}
+
+/* 头部标题 */
+.container .head-title .head-logo {
+  width: 70rpx;
+  height: 65rpx;
+  margin-left: 25rpx;
+}
+
+.container .head-title .head-text {
+  margin-left: 10rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #666;
+}
+
+.container .head-title .head-more {
+  width: 15rpx;
+  height: 15rpx;
+  border-top: 2rpx solid #999;
+  border-right: 2rpx solid #999;
+  transform: rotate(45deg);
+  margin-left: 10rpx;
+}
+
+.container .head-title .head-edit {
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-left: auto;
+  margin-right: 25rpx;
+}
+
+/* 商品列表 */
+.container .prod-list {
+  background: white;
+  border-radius: 5%;
+  overflow: hidden;
+  margin: 20rpx;
 }
 
 .prod-list .prod-block {
@@ -29,8 +72,8 @@ container .prod-list {
   /* padding: 0 5rpx; */
   border-radius: 8rpx;
   font-size: 22rpx;
-  color: #eb2444;
-  border: 2rpx solid #eb2444;
+  color: #ec6817;
+  border: 2rpx solid #ec6817;
 }
 
 .prod-list .prod-block .discount-tips .text-list {
@@ -49,19 +92,6 @@ container .prod-list {
   position: relative;
   color: #999;
   width: 100%;
-}
-
-.prod-list .item .prodinfo::after {
-  content: "";
-  background-color: #f4f4f4;
-  left: 0;
-  height: 1px;
-  transform-origin: 50% 100% 0;
-  bottom: -20rpx;
-  position: absolute;
-  display: block;
-  width: 642rpx;
-  padding-left: 20rpx;
 }
 
 .prod-list .item:last-child .prodinfo::after {
@@ -118,17 +148,6 @@ container .prod-list {
   padding: 0;
 }
 
-/* .prod-info-text:before, .prod-info-text:after {
-  content: "";
-  display: block;
-  width: 0;
-  height: 0;
-  position: absolute;
-  border: 5px solid transparent;
-  right: 5px;
-  top: 10px;
-} */
-
 .prod-info-text:before {
   border-top: 5px solid #aaa;
 }
@@ -146,11 +165,13 @@ container .prod-list {
   font-size: 0;
 }
 
-.prod-list .item .pic image {
-  max-width: 100%;
-  max-height: 100%;
-  /* border-radius: 8rpx; */
-  vertical-align: middle;
+.prod-pic {
+  width: 150rpx;
+  height: 150rpx;
+  border-radius: 8rpx;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
 }
 
 .prodinfo .opt .price-count {
@@ -160,7 +181,7 @@ container .prod-list {
 }
 
 .prodinfo .opt .price-count .price {
-  color: #eb2444;
+  color: #ec6817;
 }
 
 .lose-efficacy .prodinfo .opt .price-count .price {
@@ -230,6 +251,10 @@ container .prod-list {
   background-color: #f4f4f4;
 }
 
+.m-icon {
+  height: 56rpx;
+}
+
 /*checkbox 选项框大小  */
 
 checkbox .wx-checkbox-input {
@@ -241,8 +266,8 @@ checkbox .wx-checkbox-input {
 /*checkbox选中后样式  */
 
 checkbox .wx-checkbox-input.wx-checkbox-input-checked {
-  background: #eb2444;
-  border-color: #eb2444;
+  background: #ec6817;
+  border-color: #ec6817;
 }
 
 /*checkbox选中后图标样式  */
@@ -322,14 +347,15 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
 .cart-footer {
   position: fixed;
   /* bottom: 100rpx; */
-  bottom: calc(env(safe-area-inset-bottom));
+  /* bottom: calc(env(safe-area-inset-bottom)); */
+  bottom: 0rpx;
   left: 0;
   width: 100%;
   display: flex;
   flex-direction: row nowrap;
   height: 98rpx;
   border-top: 2rpx solid #f4f4f4;
-  z-index: 999;
+  z-index: 99;
 }
 
 .cart-footer .btn {
@@ -352,7 +378,7 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
   align-items: flex-start;
 }
 .cart-footer .btn.del {
-  color: #eb2444;
+  color: #ec6817;
   width: 70rpx;
   font-size: 22rpx;
   text-align: left;
@@ -377,13 +403,13 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
 }
 
 .cart-footer .btn.total .price {
-  color: #eb2444;
+  color: #ec6817;
   font-size: 30rpx;
 }
 
 .cart-footer .btn.settle {
   width: 200rpx;
-  background: #eb2444;
+  background: #ec6817;
   color: #fff;
 }
 

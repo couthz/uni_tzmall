@@ -48,7 +48,7 @@ page {
   position: absolute;
   right: 30rpx;
   top: 31rpx;
-  color: #eb2444;
+  color: #ec6817;
 }
 .search-bar .search-box .search-img {
   width: 32rpx;
@@ -76,7 +76,7 @@ page {
   background: #fff;
 }
 .fixed-box .tabs::after {
-  content: '';
+  content: "";
   background-color: #e1e1e1;
   left: 0;
   height: 1px;
@@ -94,7 +94,7 @@ page {
   font-size: 28rpx;
 }
 .fixed-box .tabs .tab-item.on {
-  color: #eb2444;
+  color: #ec6817;
 }
 
 /* 横向列表 */
@@ -155,7 +155,7 @@ page {
 }
 .prod-list .cont-item .show-item .prod-text-right .go-to-buy {
   font-size: 26rpx;
-  background: #eb2444;
+  background: #ec6817;
   color: #fff;
   border-radius: 50rpx;
   width: 150rpx;
@@ -180,7 +180,7 @@ page {
 }
 .prod-list .cont-item .show-item .prod-text-right .prod-price.more {
   font-size: 28rpx;
-  color: #eb2444;
+  color: #ec6817;
   font-family: arial;
 }
 .container .empty {

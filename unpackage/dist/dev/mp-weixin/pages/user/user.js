@@ -98,22 +98,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "recyclableRender", function() { return recyclableRender; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components
+try {
+  components = {
+    uniPopup: function () {
+      return __webpack_require__.e(/*! import() | uni_modules/uni-popup/components/uni-popup/uni-popup */ "uni_modules/uni-popup/components/uni-popup/uni-popup").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup/uni-popup.vue */ 285))
+    },
+  }
+} catch (e) {
+  if (
+    e.message.indexOf("Cannot find module") !== -1 &&
+    e.message.indexOf(".vue") !== -1
+  ) {
+    console.error(e.message)
+    console.error("1. 排查组件名称拼写是否正确")
+    console.error(
+      "2. 排查组件是否符合 easycom 规范，文档：https://uniapp.dcloud.net.cn/collocation/pages?id=easycom"
+    )
+    console.error(
+      "3. 若组件不符合 easycom 规范，需手动引入，并在 components 中注册该组件"
+    )
+  } else {
+    throw e
+  }
+}
 var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  var g0 =
-    _vm.isAuthInfo && _vm.loginResult.pic
-      ? _vm.loginResult.pic.indexOf("http")
-      : null
-  _vm.$mp.data = Object.assign(
-    {},
-    {
-      $root: {
-        g0: g0,
-      },
-    }
-  )
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -147,12 +158,56 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
+/* WEBPACK VAR INJECTION */(function(uni, wx) {
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -298,7 +353,9 @@ var _default = {
       collectionCount: 0,
       isAuthInfo: false,
       loginResult: "",
-      picDomain: config.picDomain
+      tempAvatarUrl: "",
+      tempNickName: "",
+      staticUrl: config.staticUrl
     };
   },
   components: {},
@@ -323,6 +380,7 @@ var _default = {
       // isAuthInfo: Boolean(wx.getStorageSync('loginResult').userId),
     });
 
+    console.log(ths.loginResult.avatarUrl);
     if (ths.loginResult) {
       ths.setData({
         isAuthInfo: true
@@ -333,7 +391,7 @@ var _default = {
       });
     }
     if (ths.isAuthInfo) {
-      uni.showLoading();
+      // uni.showLoading();
       var params = {
         url: "/p/myOrder/orderCount",
         method: "GET",
@@ -345,10 +403,11 @@ var _default = {
           });
         }
       };
-      http.request(params);
-      this.showCollectionCount();
+      //   http.request(params);
+      //   this.showCollectionCount();
     }
   },
+
   /**
    * 生命周期函数--监听页面隐藏
    */
@@ -452,6 +511,9 @@ var _default = {
         url: "../accountLogin/accountLogin"
       });
     },
+    moveHandle: function moveHandle() {
+      //禁止父元素滑动
+    },
     /**
      * 退出登录
      */
@@ -481,11 +543,79 @@ var _default = {
           }, 1000);
         }
       });
+    },
+    onGetUserInfo: function onGetUserInfo() {
+      console.log(this.loginResult);
+      if (this.loginResult.avatarUrl && this.loginResult.avatarUrl != "" && this.loginResult.nickName && this.loginResult.nickName != "") {} else {
+        this.$refs.userInfo.open("bottom");
+      }
+    },
+    onChooseAvatar: function onChooseAvatar(e) {
+      var avatarUrl = e.detail.avatarUrl;
+      var ths = this;
+      uni.uploadFile({
+        url: config.domain + "/upload/upload/file",
+        filePath: avatarUrl,
+        name: 'file',
+        header: {
+          Authorization: uni.getStorageSync("token")
+        },
+        success: function success(res) {
+          ths.setData({
+            tempAvatarUrl: JSON.parse(res.data).data.filename
+          });
+        }
+      });
+    },
+    onConfirmUserInfo: function onConfirmUserInfo() {
+      if (this.tempAvatarUrl == "") {
+        uni.showToast({
+          // zheli
+          title: "请设置头像",
+          icon: "none"
+        });
+      } else if (this.tempNickName == "") {
+        uni.showToast({
+          // zheli
+          title: "请填写昵称",
+          icon: "none"
+        });
+      } else {
+        var ths = this;
+        uni.showLoading();
+        var params = {
+          url: "/user/user/updateAvatarAndNickName",
+          method: "POST",
+          data: {
+            avatarUrl: this.tempAvatarUrl,
+            nickName: this.tempNickName
+          },
+          callBack: function callBack() {
+            var loginResult = ths.loginResult;
+            loginResult.avatarUrl = ths.tempAvatarUrl;
+            loginResult.nickName = ths.tempNickName;
+            ths.setData({
+              loginResult: loginResult
+            });
+            wx.setStorageSync("loginResult", loginResult);
+            uni.hideLoading();
+            ths.$refs.userInfo.close();
+          }
+        };
+        http.request(params);
+      }
+    },
+    onCancelUserInfo: function onCancelUserInfo() {
+      this.setData({
+        tempAvatarUrl: "",
+        tempNickName: ""
+      });
+      this.$refs.userInfo.close();
     }
   }
 };
 exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"], __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/wx.js */ 1)["default"]))
 
 /***/ }),
 

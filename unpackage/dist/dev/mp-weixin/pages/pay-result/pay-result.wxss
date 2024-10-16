@@ -1,7 +1,7 @@
 /* pages/pay-result/pay-result.wxss */
 .pay-sts {
   font-size: 40rpx;
-  margin-top: 100rpx;
+  margin-top: 50%;
   padding: 30rpx 0;
   text-align: center;
 }
@@ -10,6 +10,9 @@
 }
 .pay-sts.succ {
   color: #19be6b;
+}
+.pay-sts.paying {
+  color: #f90;
 }
 .btns {
   margin-top: 50rpx;

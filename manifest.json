@@ -1,6 +1,6 @@
 {
     "name" : "yamikejimall4j",
-    "appid" : "",
+    "appid" : "__UNI__A7D993E",
     "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : "100",
@@ -16,7 +16,8 @@
             "delay" : 0
         },
         "modules" : {
-            "OAuth" : {}
+            "OAuth" : {},
+            "Payment" : {}
         },
         "distribute" : {
             "android" : {
@@ -52,13 +53,20 @@
                         "appid" : "wxeda033eb249af3fc",
                         "UniversalLinks" : ""
                     }
+                },
+                "payment" : {
+                    "weixin" : {
+                        "__platform__" : [ "ios", "android" ],
+                        "appid" : "wxeda033eb249af3fc",
+                        "UniversalLinks" : ""
+                    }
                 }
             }
         }
     },
     "quickapp" : {},
     "mp-weixin" : {
-        "appid" : "",
+        "appid" : "wxeda033eb249af3fc",
         "setting" : {
             "urlCheck" : false
         },

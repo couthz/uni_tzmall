@@ -2,6 +2,12 @@
 page {
   background: #f4f4f4;
 }
+.delivery-info {
+  margin-bottom: 15rpx;
+  padding: 20rpx 30rpx;
+  background-color: white;
+  font-size: 22rpx;
+}
 .order-detail {
   margin-bottom: 120rpx;
   padding-bottom: 160rpx;
@@ -30,7 +36,7 @@ page {
   font-size: 26rpx;
   line-height: 36rpx;
   color: #999;
-  word-wrap:break-word;
+  word-wrap: break-word;
 }
 
 /* 商品列表 */
@@ -39,9 +45,12 @@ page {
   margin-top: 15rpx;
   font-size: 28rpx;
 }
-.prod-item .item-cont .prod-pic image {
+.prod-item .item-cont .prod-pic .prod-pic-image {
   width: 180rpx;
   height: 180rpx;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
 }
 .prod-item .item-cont {
   display: flex;
@@ -150,7 +159,7 @@ page {
 }
 .order-msg .msg-item .item.payment {
   border-top: 2rpx solid #f1f1f1;
-  color: #eb2444;
+  color: #ec6817;
   padding-top: 30rpx;
 }
 .order-msg .msg-item .item .item-tit {
@@ -168,7 +177,7 @@ page {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.order-msg .msg-item .item  .copy-btn {
+.order-msg .msg-item .item .copy-btn {
   display: block;
   margin-left: 20rpx;
   border: 2rpx solid #e4e4e4;
@@ -194,6 +203,22 @@ page {
   font-size: 26rpx;
   box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
 }
+.order-detail-footer .pay-order {
+  display: flex;
+  font-weight: bold;
+  font-size: 30rpx;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 40rpx;
+  height: 100rpx;
+}
+.order-detail-footer .pay-order .pay-btn {
+  font-size: 30rpx;
+  margin-left: 20rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  width: 150rpx;
+}
 .order-detail-footer .dele-order {
   margin-left: 20rpx;
   line-height: 60rpx;
@@ -210,7 +235,7 @@ page {
 .order-detail-footer .footer-box .buy-again {
   font-size: 26rpx;
   color: #fff;
-  background: #eb2444;
+  background: #ec6817;
   border-radius: 50rpx;
   padding: 10rpx 20rpx;
   margin-right: 20rpx;
@@ -221,6 +246,17 @@ page {
   padding: 10rpx 20rpx;
   border: 1px solid #e4e4e4;
   margin-right: 20rpx;
+}
+.order-detail-footer .footer-btn {
+  margin-left: auto;
+  margin-right: 30rpx;
+  font-size: 26rpx;
+  color: #ec6817;
+  background-color: white;
+  border-radius: 15rpx;
+  padding: 10rpx 20rpx;
+
+  border: 2rpx solid #ec6817;
 }
 .clearfix:after {
   content: " ";
@@ -236,7 +272,7 @@ page {
   margin-right: 20rpx;
 }
 .order-state .order-sts {
-  color: #eb2444;
+  color: #ec6817;
   font-size: 28rpx;
 }
 .order-state .order-sts.gray {

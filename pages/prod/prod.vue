@@ -1,7 +1,19 @@
 <template>
   <!-- 商品详情 -->
-  <view class="container">
+  <view id="container" class="container" ref="content">
+    <view
+      :class="{ 'head-nav-container--hidden': hideNavbar }"
+      class="head-nav-container"
+    >
+      <uni-link class="head-nav-item" href="#container">商品</uni-link>
+      <uni-link class="head-nav-item" href="#detail">详情</uni-link>
+      <uni-link class="head-nav-item" href="#recommend">推荐</uni-link>
+    </view>
     <!-- 轮播图 -->
+    <view class="head-title">
+      <image class="head-logo" src="../../static/images/logo/image.png"></image>
+      <view class="head-text">红丽外贸服装</view>
+    </view>
     <swiper
       :indicator-dots="indicatorDots"
       :autoplay="autoplay"
@@ -12,7 +24,10 @@
     >
       <block v-for="(item, index) in imgs" :key="index">
         <swiper-item>
-          <image :src="item"></image>
+          <view
+            class="swiper-img"
+            :style="{ backgroundImage: `url(${fullImagePath(item)})` }"
+          ></view>
         </swiper-item>
       </block>
     </swiper>
@@ -22,18 +37,8 @@
     <view class="prod-info">
       <!-- 商品名,收藏按钮 -->
       <view class="tit-wrap">
+        <view class="brand-label">品牌</view>
         <view class="prod-tit">{{ prodName }}</view>
-        <view class="col" @tap="addOrCannelCollection">
-          <image
-            v-if="!isCollection"
-            src="/static/images/icon/prod-col.png"
-          ></image>
-          <image
-            v-if="isCollection"
-            src="/static/images/icon/prod-col-red.png"
-          ></image>
-          收藏
-        </view>
       </view>
       <!-- 商品简介 -->
       <view class="sales-p">{{ brief }}</view>
@@ -42,7 +47,6 @@
         <text class="price"
           >￥
           <text class="price-num"> {{ price }} </text>
-          起
         </text>
         <!-- <text v-if="defaultSku && defaultSku.price" class="price"
           >￥<text class="price-num">{{
@@ -75,24 +79,20 @@
   </view> -->
     <!-- 已选规格 -->
     <view class="sku" @tap="showSku">
-      <view class="sku-tit">已选</view>
-      <view class="sku-con"
-        >{{ selectedProp.length > 0 ? selectedProp + "，" : ""
-        }}{{ prodNum }}件</view
-      >
+      <view class="sku-tit">选择</view>
+      <view class="sku-con">颜色，尺码</view>
       <view class="more">...</view>
     </view>
     <!-- 评价 -->
-    <view class="cmt-wrap">
+    <!-- <view class="cmt-wrap" id="comment">
       <view class="cmt-tit" @tap="showComment">
-        <view class="cmt-t"> 评价 </view>
+        <view class="cmt-t"> 商品评价 </view>
         <view class="cmt-count">
-          共{{ prodCommData.number }}条
-          <text class="cmt-more"></text>
+          {{ littleCommPage.length > 0 ? "查看全部" : "暂无评价" }}
+          <text v-if="littleCommPage.length > 0" class="cmt-more"></text>
         </view>
       </view>
       <view class="cmt-cont">
-        <view class="cmt-tag" @tap="showComment"> </view>
         <view class="cmt-items">
           <view
             v-for="(item, index) in littleCommPage"
@@ -100,18 +100,39 @@
             class="cmt-item"
           >
             <view class="cmt-user">
-              <text class="date">{{ item.recTime }}</text>
+              <uni-dateformat
+                class="date"
+                :date="item.recTime"
+              ></uni-dateformat>
+
               <view class="cmt-user-info">
-                <image class="user-img" :src="item.pic"></image>
-                <view class="nickname">{{ item.nickName }}</view>
-                <!-- <van-rate readonly :value="item.score" @change="onChange" color="#f44"></van-rate> -->
+                <image
+                  class="user-img"
+                  :src="
+                    item.avatarUrl && item.avatarUrl != ''
+                      ? staticUrl + item.avatarUrl
+                      : '../../static/images/avatar/dress.png'
+                  "
+                ></image>
+                <view class="nickname">{{
+                  item.isAnonymous === 1 ? "匿名用户" : item.nickName
+                }}</view>
+                <view class="prod-attr">
+                  {{ item.prodAttrDesc }}
+                </view>
+                <van-rate
+                  readonly
+                  :value="item.score"
+                  @change="onChange"
+                  color="#f44"
+                ></van-rate>
               </view>
             </view>
             <view class="cmt-cnt">{{ item.content }}</view>
             <scroll-view
               class="cmt-attr"
               scroll-x="true"
-              v-if="item.pics.length"
+              v-if="item.pics && item.pics.length"
             >
               <image
                 v-for="(commPic, index2) in item.pics"
@@ -121,16 +142,38 @@
             </scroll-view>
           </view>
         </view>
-        <view class="cmt-more-v" v-if="prodCommPage.records.length > 2">
-          <text @tap="showComment">查看全部评价</text>
-        </view>
       </view>
+    </view> -->
+    <!-- 店铺导航 -->
+    <view class="shop-nav">
+      <image
+        class="shop-nav-logo"
+        src="../../static/images/logo/image.png"
+      ></image>
+      <view class="shop-nav-text">红丽外贸服装</view>
+      <button class="shop-nav-btn" @tap="toIndexPage">进店逛逛</button>
     </view>
+    <!-- 为你推荐 -->
+    <!-- <view class="recommend">
+      <view class="recommend-title">
+        <view class="recommend-text">为你推荐</view>
+        <text class="recommend-more"></text>
+      </view>
+    </view> -->
     <!-- 商品详情 -->
-    <view class="prod-detail">
+    <view class="prod-detail" id="detail">
       <view>
-        <rich-text :nodes="content"></rich-text>
-        <!-- <image src="//img14.360buyimg.com/cms/jfs/t1/25195/1/9487/388554/5c7f80a5E8b8f8f0c/46818404849d6ec6.jpg!q70.dpg" mode="widthFix"></image> -->
+        <view v-if="isHTML(content)">
+          <rich-text :nodes="content"></rich-text>
+        </view>
+        <view class="prod-detail-content" v-else> {{ content }} </view>
+        <block v-for="(item, index) in contentImg" :key="index">
+          <image
+            class="content-img"
+            :src="fullImagePath(item)"
+            mode="widthFix"
+          ></image>
+        </block>
       </view>
     </view>
     <!-- end 商品详情 -->
@@ -176,10 +219,10 @@
       class="sku-select"
       ref="skuselect"
       @touchmove.stop.prevent="moveHandle"
+      @change="onPopupChange"
     >
       <skuSelect
-        :specifications="specifications"
-        :shopItemInfo="shopItemInfo"
+        :skuSelectData="skuSelectData"
         :prodId="prodId"
         @close-popup="closeSkuselect"
       ></skuSelect>
@@ -246,7 +289,7 @@
               <scroll-view
                 class="cmt-attr"
                 scroll-x="true"
-                v-if="item.pics.length"
+                v-if="item.pics && item.pics.length"
               >
                 <image
                   v-for="(commPic, index2) in item.pics"
@@ -294,14 +337,15 @@ export default {
       // picDomain: config.picDomain,
       indicatorDots: true,
       indicatorColor: "#f2f2f2",
-      indicatorActiveColor: "#eb2444",
-      autoplay: true,
-      interval: 3000,
+      indicatorActiveColor: "#EC6817",
+      autoplay: false,
+      interval: 10000,
       duration: 1000,
       prodNum: 1,
       totalCartNum: 0,
       pic: "",
       imgs: "",
+      contentImg: [],
       prodName: "",
       price: 0,
       content: "",
@@ -317,11 +361,7 @@ export default {
       // skuList: [],
       // skuGroup: {},
       defaultSku: undefined,
-
-      //sku选择框所有可能的规格
-      specifications: {},
-      //key:所有可能的子路径 value:sku(只有全路径是才不为null)
-      shopItemInfo: {},
+      skuSelectData: {},
 
       selectedProp: [],
       selectedPropObj: {},
@@ -336,7 +376,16 @@ export default {
       littleCommPage: [],
       evaluate: -1,
       isCollection: false,
+      hideNavbar: true, // 控制是否显示顶部导航栏
+      lastScrollPosition: 0, // 记录上次滚动的位置
+      staticUrl: config.staticUrl,
     };
+  },
+
+  computed: {
+    fullImagePath() {
+      return (path) => config.staticUrl + path;
+    },
   },
 
   components: {
@@ -357,7 +406,7 @@ export default {
 
     //this.getProdCommData(); // 加载评论项
 
-    //this.getLittleProdComm(); // 查看用户是否关注
+    this.getLittleProdComm(); // 查看用户是否关注
 
     //this.getCollection();
   },
@@ -370,11 +419,7 @@ export default {
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
-    this.setData({
-      totalCartNum: app.globalData.totalCartCount,
-    });
-  },
+  onShow: function () {},
 
   /**
    * 生命周期函数--监听页面隐藏
@@ -409,6 +454,24 @@ export default {
       title: this.prodName,
       path: "/pages/prod/prod?prodid=" + this.prodid,
     };
+  },
+  onPageScroll: function (e) {
+    // 获取当前滚动位置
+    const currentScrollPosition = e.scrollTop;
+    // 如果当前滚动位置大于上次滚动位置，则显示顶部导航栏
+    // 否则隐藏顶部导航栏
+    if (currentScrollPosition === 0) {
+      this.setData({
+        hideNavbar: true,
+      });
+    } else {
+      this.setData({
+        hideNavbar: false,
+      });
+    }
+
+    // 更新上次滚动位置为当前滚动位置
+    this.lastScrollPosition = currentScrollPosition;
   },
   methods: {
     /**
@@ -468,18 +531,18 @@ export default {
           }
           var imgStrs = res.imgs;
           var imgs = imgStrs.split(",");
-          var content = util.formatHtml(res.content);		 
-
+          var content = util.formatHtml(res.content);
+          var contentImg = res.contentImg.split(",");
           this.setData({
             imgs: imgs,
             content: content,
+            contentImg: contentImg,
             price: res.price,
             prodName: res.prodName,
             prodId: res.prodId,
             brief: res.brief,
             pic: res.pic,
-            specifications: res.prodSkuSelectDTO.attrvalueMap,
-            shopItemInfo: res.prodSkuSelectDTO.attrSkuMap,
+            skuSelectData: res.prodSkuSelectDTO,
           }); // 获取优惠券
           //this.getCouponList();
           // 组装sku
@@ -536,22 +599,22 @@ export default {
       }
 
       http.request({
-        url: "/prodComm/prodCommPageByProd",
-        method: "GET",
+        url: "/prod/prodComment/prodCommmentPage",
+        method: "POST",
         data: {
-          prodId: this.prodId,
-          size: 10,
           current: this.prodCommPage.current + 1,
-          evaluate: this.evaluate,
+          size: 10,
+          prodId: this.prodId,
+          // evaluate: this.evaluate,
         },
         callBack: (res) => {
-          res.records.forEach((item) => {
+          res.items.forEach((item) => {
             if (item.pics) {
               item.pics = item.pics.split(",");
             }
           });
           let records = this.prodCommPage.records;
-          records = records.concat(res.records);
+          records = records.concat(res.items);
           this.setData({
             prodCommPage: {
               current: res.current,
@@ -711,6 +774,27 @@ export default {
     },
     moveHandle() {
       //禁止父元素滑动
+    },
+
+    isHTML(str) {
+      // 使用正则表达式检查字符串中是否包含HTML标签
+      const htmlRegex =
+        /<([A-Za-z][A-Za-z0-9]*)\b[^>]*>(.*?)<\/\1>|<([A-Za-z][A-Za-z0-9]*)\b[^\/]*\/>/;
+      return htmlRegex.test(str);
+    },
+
+    toIndexPage: function () {
+      var url = "/pages/index/index";
+      uni.switchTab({
+        url: url,
+      });
+    },
+    onPopupChange(e) {
+      if (!e.show) {
+        this.setData({
+          skuSelectData: {},
+        });
+      }
     },
   },
 };

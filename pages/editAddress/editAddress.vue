@@ -100,32 +100,26 @@ export default {
 
   components: {},
   props: {},
-  onLoad: function (options) {
-    if (options.addrId) {
+  onLoad: function () {
+    if (uni.getStorageSync('userAddr')) {
+      const userAddrJson = uni.getStorageSync('userAddr');
+      const userAddr = JSON.parse(userAddrJson);
       uni.showLoading();
-      var params = {
-        url: "/p/address/addrInfo/" + options.addrId,
-        method: "GET",
-        data: {},
-        callBack: res => {
-          //console.log(res)
-          this.setData({
-            province: res.province,
-            city: res.city,
-            area: res.area,
-            provinceId: res.provinceId,
-            cityId: res.cityId,
-            areaId: res.areaId,
-            receiver: res.receiver,
-            mobile: res.mobile,
-            addr: res.addr,
-            addrId: options.addrId
-          });
-          this.initCityData(res.provinceId, res.cityId, res.areaId);
-          uni.hideLoading();
-        }
-      };
-      http.request(params);
+      this.setData({
+        province: userAddr.province,
+        city: userAddr.city,
+        area: userAddr.area,
+        provinceId: userAddr.provinceId,
+        cityId: userAddr.cityId,
+        areaId: userAddr.areaId,
+        receiver: userAddr.receiver,
+        mobile: userAddr.mobile,
+        addr: userAddr.addr,
+        addrId: userAddr.addrId
+      });
+      this.initCityData(userAddr.provinceId, userAddr.cityId, userAddr.areaId);
+      uni.hideLoading();
+        
     } else {
       this.initCityData(this.provinceId, this.cityId, this.areaId);
     }
@@ -153,10 +147,9 @@ export default {
       var ths = this;
       uni.showLoading();
       var params = {
-        url: "/p/area/listByPid",
+        url: "/area/area/listByParentId/0",
         method: "GET",
         data: {
-          pid: 0
         },
         callBack: function (res) {
           //console.log(res)
@@ -260,10 +253,9 @@ export default {
     getCityArray: function (provinceId, cityId, areaId) {
       var ths = this;
       var params = {
-        url: "/p/area/listByPid",
+        url: "/area/area/listByParentId/" + provinceId,
         method: "GET",
         data: {
-          pid: provinceId
         },
         callBack: function (res) {
           //console.log(res)
@@ -294,10 +286,9 @@ export default {
     getAreaArray: function (cityId, areaId) {
       var ths = this;
       var params = {
-        url: "/p/area/listByPid",
+        url: "/area/area/listByParentId/" + cityId,
         method: "GET",
         data: {
-          pid: cityId
         },
         callBack: function (res) {
           //console.log(res)
@@ -390,19 +381,9 @@ export default {
       }
 
       uni.showLoading();
-      var url = "/p/address/addAddr";
+      var url = "/user/userAddr/save";
       var method = "POST";
-
-      if (ths.addrId != 0) {
-        url = "/p/address/updateAddr";
-        method = "PUT";
-      } //添加或修改地址
-
-
-      var params = {
-        url: url,
-        method: method,
-        data: {
+      var data = {
           receiver: ths.receiver,
           mobile: ths.mobile,
           addr: ths.addr,
@@ -412,9 +393,19 @@ export default {
           cityId: ths.cityId,
           areaId: ths.areaId,
           area: ths.area,
-          userType: 0,
-          addrId: ths.addrId
-        },
+        }
+
+      if (ths.addrId != 0) {
+        url = "/user/userAddr/update";
+        method = "PUT";
+        data.addrId = ths.addrId;
+      } //添加或修改地址
+
+
+      var params = {
+        url: url,
+        method: method,
+        data: data,
         callBack: function (res) {
           uni.hideLoading();
           uni.navigateBack({
@@ -445,14 +436,14 @@ export default {
       uni.showModal({
         title: '',
         content: '确定要删除此收货地址吗？',
-        confirmColor: "#eb2444",
+        confirmColor: "#EC6817",
 
         success(res) {
           if (res.confirm) {
             var addrId = ths.addrId;
             uni.showLoading();
             var params = {
-              url: "/p/address/deleteAddr/" + addrId,
+              url: "/user/userAddr/delete/" + addrId,
               method: "DELETE",
               data: {},
               callBack: function (res) {

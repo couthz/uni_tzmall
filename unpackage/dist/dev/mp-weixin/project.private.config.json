@@ -4,5 +4,79 @@
   "setting": {
     "compileHotReLoad": true
   },
-  "libVersion": "2.32.0"
+  "libVersion": "2.32.0",
+  "condition": {
+    "miniprogram": {
+      "list": [
+        {
+          "name": "描述页",
+          "pathName": "pages/aftersale-apply/aftersale-type",
+          "query": ""
+        },
+        {
+          "name": "个人页",
+          "pathName": "pages/user/user",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "详情页",
+          "pathName": "pages/prod/prod",
+          "query": "prodid=4",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "购物车",
+          "pathName": "pages/basket/basket",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/pay-result/pay-result",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "订单列表",
+          "pathName": "pages/orderList/orderList",
+          "query": "sts=0",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "订单详情",
+          "pathName": "pages/order-detail/order-detail",
+          "query": "orderNumber=1171540388028342",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "orderdetail",
+          "pathName": "pages/order-detail/order-detail",
+          "query": "orderNumber=1171541426421722&listIndex=0",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "订单修改地址",
+          "pathName": "pages/order-address/order-address",
+          "query": "addrId=6",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "订单详情待发货",
+          "pathName": "pages/order-detail/order-detail",
+          "query": "orderNumber=1171541473758992&listIndex=0",
+          "launchMode": "default",
+          "scene": null
+        }
+      ]
+    }
+  }
 }

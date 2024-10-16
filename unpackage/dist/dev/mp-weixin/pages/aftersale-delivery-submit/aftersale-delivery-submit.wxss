@@ -1,8 +1,0 @@
-page {
-  background-color: #f4f4f4;
-}
-.container .delivery-form {
-  background-color: white;
-  padding: 30rpx;
-}
-

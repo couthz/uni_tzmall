@@ -1,24 +1,23 @@
 <template>
   <!--pages/user/user.wxml-->
   <view class="container">
-
     <view class="userinfo" v-if="isAuthInfo">
+
+    <!-- <view class="userinfo" v-if="isAuthInfo" @tap="onGetUserInfo"> -->
       <view class="userinfo-con">
         <view class="userinfo-avatar">
           <!-- <open-data type="userAvatarUrl"></open-data> -->
           <image
             :src="
-              loginResult.pic
-                ? loginResult.pic.indexOf('http') === -1
-                  ? picDomain + loginResult.pic
-                  : loginResult.pic
+              (loginResult.avatarUrl && loginResult.avatarUrl != '')
+                ? staticUrl + loginResult.avatarUrl
                 : '../../static/images/icon/head04.png'
             "
           ></image>
         </view>
         <view class="userinfo-name">
           <view>{{
-            loginResult.nickName ? loginResult.nickName : "用户昵称"
+            loginResult.nickName && loginResult.nickName != '' ? loginResult.nickName : "Holly"
           }}</view>
           <!-- <open-data type="userNickName"></open-data> -->
         </view>
@@ -125,8 +124,53 @@
         </view>
       </view>
       <!--end 列表项 -->
-
     </view>
+    <!-- <uni-popup
+      ref="getUserInfo"
+      @touchmove.stop.prevent="moveHandle"
+      type="bottom"
+    > -->
+    <uni-popup
+      ref="userInfo"
+      @touchmove.stop.prevent="moveHandle"
+      type="bottom"
+      :animation="true"
+    >
+    <view
+      class="get-userInfo"
+    >
+      <view class="head-title">
+        <image src="../../static/images/logo/image.png" mode="scaleToFill" />
+        <view>红丽外贸商城 申请</view>
+      </view>
+      <view class="apply-title info-item">获取你的昵称、头像</view>
+      <view class="avatar info-item">
+        <view>头像</view>
+        <view class="avatar-input">
+          <!-- <open-data type="userAvatarUrl"></open-data> -->
+          <button open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
+            <image
+              :src="
+                tempAvatarUrl && tempAvatarUrl != ''
+                  ? staticUrl + tempAvatarUrl
+                  : '../../static/images/icon/head04.png'
+              "
+            ></image>
+          </button>
+        </view>
+      </view>
+
+      <view class="nick-name info-item">
+        <view>昵称</view>
+        <input type="nickname" v-model="tempNickName" class="nick-name-input" placeholder="点击填写"></input>
+      </view>
+      <view class="random info-item">随机头像昵称</view>
+      <button type="primary" class="confirm info-item" @tap="onConfirmUserInfo">允许</button>
+      <button type="default" class="cancel info-item" @tap="onCancelUserInfo">拒绝</button>
+    </view>
+  </uni-popup>
+
+    <!-- </uni-popup> -->
   </view>
 </template>
 
@@ -144,7 +188,9 @@ export default {
       collectionCount: 0,
       isAuthInfo: false,
       loginResult: "",
-      picDomain: config.picDomain,
+      tempAvatarUrl: "",
+      tempNickName: "",
+      staticUrl: config.staticUrl,
     };
   },
 
@@ -168,10 +214,13 @@ export default {
     //加载订单数字
     var ths = this; // var status = ths.data.status
     console.log(uni.getStorageSync("loginResult"));
+    
     ths.setData({
       loginResult: uni.getStorageSync("loginResult"),
       // isAuthInfo: Boolean(wx.getStorageSync('loginResult').userId),
     });
+    console.log(ths.loginResult.avatarUrl);
+
     if (ths.loginResult) {
       ths.setData({
         isAuthInfo: true,
@@ -182,7 +231,7 @@ export default {
       });
     }
     if (ths.isAuthInfo) {
-      uni.showLoading();
+      // uni.showLoading();
       var params = {
         url: "/p/myOrder/orderCount",
         method: "GET",
@@ -194,8 +243,8 @@ export default {
           });
         },
       };
-      http.request(params);
-      this.showCollectionCount();
+    //   http.request(params);
+    //   this.showCollectionCount();
     }
   },
 
@@ -308,8 +357,11 @@ export default {
      */
     toLogin: function () {
       uni.navigateTo({
-      	url: "../accountLogin/accountLogin"
-      })
+        url: "../accountLogin/accountLogin",
+      });
+    },
+    moveHandle() {
+      //禁止父元素滑动
     },
 
     /**
@@ -342,6 +394,84 @@ export default {
           }, 1000);
         },
       });
+    },
+
+    onGetUserInfo() {
+      console.log(this.loginResult);
+      if (this.loginResult.avatarUrl &&  this.loginResult.avatarUrl != "" && this.loginResult.nickName && this.loginResult.nickName != "") {
+      }
+      else {
+        this.$refs.userInfo.open("bottom");
+
+      }
+    },
+    onChooseAvatar(e) {
+      const { avatarUrl } = e.detail;
+      const ths = this;
+      uni.uploadFile({
+        url: config.domain + "/upload/upload/file",
+        filePath: avatarUrl,
+        name: 'file',
+        header: {
+          Authorization: uni.getStorageSync("token"),
+        },
+        success: (res)=> {
+          ths.setData({
+            tempAvatarUrl: JSON.parse(res.data).data.filename,
+          });
+        }
+      },
+    );
+
+    },
+
+    onConfirmUserInfo() {
+      if (this.tempAvatarUrl == "") {
+        uni.showToast({
+          // zheli
+          title: "请设置头像",
+          icon: "none",
+        });
+      }
+      else if (this.tempNickName == "") {
+        uni.showToast({
+          // zheli
+          title: "请填写昵称",
+          icon: "none",
+        });
+      }
+      else {
+        const ths = this;
+        uni.showLoading();
+        var params = {
+          url: "/user/user/updateAvatarAndNickName",
+          method: "POST",
+          data: {
+            avatarUrl: this.tempAvatarUrl,
+            nickName: this.tempNickName
+          },
+          callBack: function () {
+            let loginResult = ths.loginResult;
+            loginResult.avatarUrl = ths.tempAvatarUrl;
+            loginResult.nickName = ths.tempNickName;
+            ths.setData({
+              loginResult: loginResult
+            })
+            wx.setStorageSync("loginResult", loginResult);
+            uni.hideLoading();
+            ths.$refs.userInfo.close();
+          },
+        };
+        http.request(params);
+      }
+    },
+
+    onCancelUserInfo() {
+      this.setData({
+        tempAvatarUrl: "",
+        tempNickName: ""
+      })
+      this.$refs.userInfo.close();
     },
   },
 };

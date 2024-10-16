@@ -4,5 +4,7 @@
   "navigationBarTextStyle": "black",
   "enablePullDownRefresh": true,
   "navigationBarTitleText": "mall4j",
-  "usingComponents": {}
+  "usingComponents": {
+    "prod-card": "/components/prod-card/prod-card"
+  }
 }

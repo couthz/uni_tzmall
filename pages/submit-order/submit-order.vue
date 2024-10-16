@@ -33,13 +33,14 @@
         <!-- 商品详情 -->
         <view class="prod-item">
           <block v-for="(item, index) in orderItems" :key="index">
-            <view
-              class="item-cont"
-              @tap="toOrderDetailPage"
-              :data-ordernum="item.primaryOrderNo"
-            >
+            <view class="item-cont">
               <view class="prod-pic">
-                <image :src="item.pic"></image>
+                <view
+                  class="prod-pic-image"
+                  :style="{
+                    backgroundImage: `url(${fullImagePath(item.pic)})`,
+                  }"
+                ></view>
               </view>
               <view class="prod-info">
                 <view class="prodname">
@@ -73,7 +74,7 @@
           </view>
         </view>
       </view> -->
-
+          <!-- 
           <view class="total-num">
             <text class="prodcount">共{{ totalCount }}件商品</text>
             <view class="prodprice"
@@ -81,7 +82,7 @@
               <text class="symbol">￥</text>
               <text class="big-num">{{ total }}</text>
             </view>
-          </view>
+          </view> -->
         </view>
 
         <!-- 订单详情 -->
@@ -117,7 +118,7 @@
               <view class="item-tit">运费：</view>
               <view class="item-txt price">
                 <text class="symbol">￥</text>
-                <text class="big-num">{{ transfee || 0.00 }}</text>
+                <text class="big-num">{{ transfee || 0.0 }}</text>
               </view>
             </view>
             <view class="item">
@@ -215,7 +216,9 @@
 <script>
 // pages/submit-order/submit-order.js
 var http = require("../../utils/http.js");
+var pay = require("../../utils/pay.js");
 import coupon from "../../components/coupon/coupon";
+var config = require("../../utils/config.js");
 
 export default {
   data() {
@@ -250,6 +253,11 @@ export default {
     coupon,
   },
   props: {},
+  computed: {
+    fullImagePath() {
+      return (path) => config.staticUrl + path;
+    },
+  },
 
   /**
    * 生命周期函数--监听页面加载
@@ -274,6 +282,7 @@ export default {
     if (currPage.selAddress == "yes") {
       //将携带的参数赋值
       this.userAddr = currPage.item;
+      currPage.selAddress = "no";
     }
 
     //获取订单数据
@@ -317,7 +326,10 @@ export default {
         mask: true,
       });
       var params = {
-        url: this.orderEntry === "1" ? "/order/order/buynowGetCheckOut" : "/order/order/shopcartGetCheckOut",
+        url:
+          this.orderEntry === "1"
+            ? "/order/order/buynowGetCheckOut"
+            : "/order/order/shopcartGetCheckOut",
         method: "POST",
         data: {
           addrId: addrId,
@@ -416,95 +428,46 @@ export default {
         url: "/order/order/submit",
         method: "POST",
         data: {
-          orderSubmitParam: {
-            remarks: this.remarks,
-          },
+          remarks: this.remarks,
         },
         callBack: (res) => {
           console.log("res", res);
           uni.hideLoading();
           // this.calWeixinPay(res.orderNumber);
-          this.normalPay(res.orderNumber);
+          this.normalPay(res);
         },
       };
       http.request(params);
     },
 
     //模拟支付，直接提交成功
-    normalPay: function (orderNumbers) {
-      uni.showLoading({
-        mask: true,
-      });
-      var params = {
-        url: "/order/pay/normalPay",
-        method: "POST",
-        data: {
-          orderNumbers: orderNumbers,
+    normalPay: function (orderNumber) {
+      var callBackParams = {
+        success: () => {
+          uni.showToast({
+            title: "支付成功",
+            icon: "none",
+          });
+          //支付成功,且后台成功修改状态
+          uni.redirectTo({
+            url:
+              "/pages/pay-result/pay-result?sts=1&orderNumber=" + orderNumber,
+          });
         },
-        callBack: () => {
-            uni.hideLoading();
-			uni.showToast({
-			  title: "模拟支付成功",
-			  icon: "none",
-			});
-			setTimeout(() => {
-			  uni.navigateTo({
-				url:
-				  "/pages/pay-result/pay-result?sts=1&orderNumbers=" +
-				  orderNumbers,
-			  });
-			}, 1200);
-        },
-      };
-      http.request(params);
-    },
-
-    /**
-     * 唤起微信支付
-     */
-    calWeixinPay: function (orderNumbers) {
-      uni.showLoading({
-        mask: true,
-      });
-      var params = {
-        url: "/p/order/pay",
-        method: "POST",
-        data: {
-          payType: 1,
-          orderNumbers: orderNumbers,
-        },
-        callBack: function (res) {
-          uni.hideLoading();
-          uni.requestPayment({
-            timeStamp: res.timeStamp,
-            nonceStr: res.nonceStr,
-            package: res.packageValue,
-            signType: res.signType,
-            paySign: res.paySign,
-            success: (e) => {
-              // console.log("支付成功");
-              uni.navigateTo({
-                url:
-                  "/pages/pay-result/pay-result?sts=1&orderNumbers=" +
-                  orderNumbers +
-                  "&orderType=" +
-                  this.orderType,
-              });
-            },
-            fail: (err) => {
-              uni.navigateTo({
-                url:
-                  "/pages/pay-result/pay-result?sts=0&orderNumbers=" +
-                  orderNumbers +
-                  "&orderType=" +
-                  this.orderType,
-              });
-            },
+        fail: () => {
+          uni.showToast({
+            title: "支付取消",
+            icon: "none",
+          });
+          //用户取消支付
+          uni.redirectTo({
+            url: "/pages/order-detail/order-detail?orderNumber=" + orderNumber,
           });
         },
       };
-      http.request(params);
+      pay.normalPay(orderNumber, callBackParams);
     },
+
     changeCouponSts: function (e) {
       this.setData({
         couponSts: e.currentTarget.dataset.sts,

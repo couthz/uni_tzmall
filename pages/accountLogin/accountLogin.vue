@@ -15,15 +15,15 @@
         >
         </image>
       </view>
-      <view class="name">红丽商城</view>
+      <view class="name">红丽外贸商城</view>
       <view class="summary u-flex"
         ><text
           >如需正常使用小程序的功能，请点击下方授权登录按钮，打开授权弹窗，并点击允许。</text
         ></view
       >
       <view class="btn"
-        ><button type="primary" size="default" shape="circle" @clik="wxLogin">
-          手机号授权登录
+        ><button type="primary" size="default" shape="circle" @tap="wxLogin">
+          授权登录
         </button></view
       >
     </view>
@@ -50,7 +50,9 @@ export default {
 
   methods: {
     wxLogin() {
-      auth.wxLogin();
+      auth.wxLogin(() => {
+        uni.navigateBack();
+      });
       // console.log();
       // if (e.detail.errMsg != "getPhoneNumber:ok") {
       //   this.$refs.miToast.show({

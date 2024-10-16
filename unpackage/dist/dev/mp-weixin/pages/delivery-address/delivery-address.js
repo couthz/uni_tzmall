@@ -219,18 +219,30 @@ exports.default = void 0;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 // pages/delivery-address/delivery-address.js
 var http = __webpack_require__(/*! ../../utils/http.js */ 30); // var config = require("../../utils/config.js");
 var _default = {
   data: function data() {
     return {
-      defaultSize: 'mini',
+      defaultSize: "mini",
       disabled: false,
       plain: true,
       loading: false,
       addressList: [],
-      addAddress: '',
+      addAddress: "",
       order: -1,
       item: "",
       selAddress: ""
@@ -250,7 +262,7 @@ var _default = {
     var ths = this;
     uni.showLoading();
     var params = {
-      url: "/p/address/list",
+      url: "/user/userAddr/list",
       method: "GET",
       data: {},
       callBack: function callBack(res) {
@@ -266,8 +278,9 @@ var _default = {
   methods: {
     //新增收货地址
     onAddAddr: function onAddAddr(e) {
+      uni.removeStorageSync("userAddr");
       uni.navigateTo({
-        url: '/pages/editAddress/editAddress'
+        url: "/pages/editAddress/editAddress"
       });
     },
     //设置为默认地址
@@ -277,22 +290,20 @@ var _default = {
       var ths = this;
       uni.showLoading();
       var params = {
-        url: "/p/address/defaultAddr/" + addrId,
+        url: "/user/userAddr/defaultAddr/" + addrId,
         method: "PUT",
-        data: {
-          addrId: addrId
-        },
+        data: {},
         callBack: function callBack(res) {
           uni.hideLoading();
         }
       };
       http.request(params);
     },
-    // 修改地址 
+    // 修改地址
     toEditAddress: function toEditAddress(e) {
-      var addrId = e.currentTarget.dataset.addrid;
+      uni.setStorageSync("userAddr", JSON.stringify(e.currentTarget.dataset.addr));
       uni.navigateTo({
-        url: '/pages/editAddress/editAddress?addrId=' + addrId
+        url: "/pages/editAddress/editAddress"
       });
     },
     /**
@@ -306,7 +317,7 @@ var _default = {
 
         //直接给上一页面赋值
         prevPage.item = item;
-        prevPage.selAddress = 'yes';
+        prevPage.selAddress = "yes";
         uni.navigateBack({
           //返回
           delta: 1
