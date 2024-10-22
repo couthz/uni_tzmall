@@ -1,4 +1,4 @@
-.hbuilderx
+.hbuilderx/
 node_modules/
 uni_modules/
 package-lock.json
