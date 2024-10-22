@@ -1,9 +1,0 @@
-{
-  "navigationBarTitleText": "商品详情",
-  "usingComponents": {
-    "uni-link": "/uni_modules/uni-link/components/uni-link/uni-link",
-    "uni-popup": "/uni_modules/uni-popup/components/uni-popup/uni-popup",
-    "coupon": "/components/coupon/coupon",
-    "sku-select": "/components/sku-select/sku-select"
-  }
-}

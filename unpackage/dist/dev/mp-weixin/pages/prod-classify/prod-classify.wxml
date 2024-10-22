@@ -1,1 +1,0 @@
-<view class="container"><view><block wx:for="{{prodList}}" wx:for-item="item" wx:for-index="index" wx:key="index"><block><prod vue-id="{{'5a1821ca-1-'+index}}" item="{{item}}" bind:__l="__l"></prod></block></block><block wx:if="{{!$root.g0}}"><view class="empty">暂无数据</view></block></view></view>
